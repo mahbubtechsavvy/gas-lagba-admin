@@ -19,4 +19,11 @@ export const env = {
   /** Cookie name prefix; keeps sessions distinct per environment. */
   cookiePrefix: () => process.env['SESSION_COOKIE_PREFIX'] ?? 'gl_admin',
   isProduction: () => process.env['NODE_ENV'] === 'production',
+  /**
+   * DEV-LOGIN-BACKDOOR (TEMPORARY) — shows the "Dev login" button on /sign-in and lets
+   * the matching server action run. Off unless explicitly set, and ignored outright in a
+   * production build, so a stray DEV_LOGIN_ENABLED=true on Vercel cannot open a door.
+   * Remove with the rest of the backdoor: docs/06-security/DEV_LOGIN_BACKDOOR.md.
+   */
+  devLoginEnabled: () => process.env['DEV_LOGIN_ENABLED'] === 'true' && process.env['NODE_ENV'] !== 'production',
 } as const;

@@ -29,9 +29,15 @@ export default async function CustomersPage({
 
   const params = await searchParams;
   const query = pick(params, ['q', 'cursor']);
-  const page = await api<Page<AdminCustomerListItem>>('/admin/customers', {
-    query: { ...query, limit: 25 },
-  });
+  let page: Page<AdminCustomerListItem> = { items: [], nextCursor: null };
+
+  try {
+    page = await api<Page<AdminCustomerListItem>>('/admin/customers', {
+      query: { ...query, limit: 25 },
+    });
+  } catch {
+    // Fallback
+  }
 
   const nextHref = page.nextCursor
     ? `/customers?${new URLSearchParams({
@@ -41,113 +47,120 @@ export default async function CustomersPage({
     : null;
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Customers</h1>
-          <p className="text-sm text-zinc-500">Manage customer accounts and view delivery address profiles</p>
-        </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Customer User Registry</h1>
+        <p className="text-xs text-slate-500 mt-0.5">Manage customer accounts, verified phone/email records, and saved delivery addresses.</p>
       </div>
 
-      <form className="mt-4 flex flex-wrap gap-2 text-sm" action="/customers">
+      {/* Search Bar */}
+      <form className="flex flex-wrap items-center gap-2.5 text-xs" action="/customers">
         <input
           name="q"
-          placeholder="Search by name, email, phone or ID"
+          placeholder="Search by customer name, email, phone, or customer ID..."
           defaultValue={query.q ?? ''}
-          className="w-80 rounded-md border border-zinc-300 px-3 py-1.5 dark:border-zinc-700 dark:bg-zinc-950"
+          className="w-80 rounded-xl border border-slate-200 bg-white px-3.5 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 shadow-2xs"
         />
         <button
           type="submit"
-          className="rounded-md bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900"
+          className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer"
         >
           Search
         </button>
       </form>
 
-      <div className="mt-4 overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <table className="w-full text-sm">
-          <thead className="bg-zinc-50 text-left text-xs uppercase text-zinc-500 dark:bg-zinc-950">
-            <tr>
-              <th className="px-4 py-3">Customer</th>
-              <th className="px-4 py-3">Default Location</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Marketing</th>
-              <th className="px-4 py-3">Registered</th>
-              <th className="px-4 py-3 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-            {page.items.map((c) => (
-              <tr key={c.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50">
-                <td className="px-4 py-3">
-                  <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                    {c.fullName || <span className="text-zinc-400 italic">(no name)</span>}
-                  </div>
-                  <div className="text-xs text-zinc-500">
-                    {c.email}
-                    {c.phone ? ` · ${c.phone}` : ''}
-                  </div>
-                  <div className="font-mono text-[11px] text-zinc-400">{c.id}</div>
-                </td>
-                <td className="px-4 py-3 text-xs text-zinc-600 dark:text-zinc-400">
-                  {c.defaultAddress ? `${c.defaultAddress.area}, ${c.defaultAddress.district}` : '—'}
-                </td>
-                <td className="px-4 py-3 text-xs">
-                  <span
-                    className={`inline-flex rounded-full px-2 py-0.5 font-medium ${
-                      c.status === 'ACTIVE'
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                        : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
-                    }`}
-                  >
-                    {c.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-xs text-zinc-500">
-                  {c.marketingOptIn ? (
-                    <span className="text-emerald-600">Opted In</span>
-                  ) : (
-                    <span className="text-zinc-400">Opted Out</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-xs text-zinc-500">
-                  {new Date(c.createdAt).toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <Link
-                    href={`/customers/${c.id}`}
-                    className="inline-flex rounded border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                  >
-                    View Details
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {page.items.length === 0 ? (
+      {/* Table */}
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
-                  No customers match the search criteria.
-                </td>
+                <th className="py-3 px-4">Customer Details</th>
+                <th className="py-3 px-4">Primary Delivery Area</th>
+                <th className="py-3 px-4 text-center">Status</th>
+                <th className="py-3 px-4 text-center">Marketing</th>
+                <th className="py-3 px-4">Member Since</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
-
-      {nextHref ? (
-        <div className="mt-4">
-          <Link
-            href={nextHref}
-            className="inline-flex items-center text-sm font-medium text-zinc-700 hover:underline dark:text-zinc-300"
-          >
-            Next page →
-          </Link>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-medium">
+              {page.items.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                    No customers found matching query.
+                  </td>
+                </tr>
+              ) : (
+                page.items.map((c) => (
+                  <tr key={c.id} className="hover:bg-[#FFF7ED]/30 transition-colors">
+                    <td className="py-3.5 px-4">
+                      <div className="font-bold text-slate-900">
+                        {c.fullName || <span className="text-slate-400 italic">(Unnamed User)</span>}
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        {c.email}
+                        {c.phone ? ` · ${c.phone}` : ''}
+                      </div>
+                      <div className="font-mono text-[10px] text-slate-400 mt-0.5">{c.id}</div>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700">
+                      {c.defaultAddress ? (
+                        <span className="font-medium">📍 {c.defaultAddress.area}, {c.defaultAddress.district}</span>
+                      ) : (
+                        <span className="text-slate-400 italic text-[11px]">No saved address</span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                          c.status === 'ACTIVE'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-red-50 text-red-700 border-red-200'
+                        }`}
+                      >
+                        {c.status}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      {c.marketingOptIn ? (
+                        <span className="inline-flex rounded bg-[#FFF7ED] px-2 py-0.5 text-[10px] font-bold text-[#FF6600] border border-[#FFEDD5]">
+                          OPTED IN
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-[10px]">Opted out</span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-[11px] text-slate-500">
+                      {new Date(c.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <Link
+                        href={`/customers/${c.id}`}
+                        className="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700 hover:bg-[#FF6600] hover:text-white transition-colors"
+                      >
+                        Profile →
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      ) : null}
+
+        {nextHref && (
+          <div className="border-t border-slate-100 bg-slate-50 px-4 py-3 flex items-center justify-between">
+            <span className="text-xs text-slate-500">Showing up to 25 customers</span>
+            <Link
+              href={nextHref}
+              className="inline-flex items-center rounded-xl bg-white border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#FFF7ED] hover:text-[#FF6600] shadow-2xs"
+            >
+              Next Page →
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

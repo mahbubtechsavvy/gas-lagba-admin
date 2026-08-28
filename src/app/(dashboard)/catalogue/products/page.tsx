@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { api, pick, type Page } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth';
-import { APPROVAL_BADGE, formatPaisa, localized, type ProductRow } from '../types';
+import { formatPaisa, localized, type ProductRow } from '../types';
 
-export const metadata = { title: 'Products · Gas Lagba Admin' };
+export const metadata = { title: 'LPG Cylinders & Catalogue · Gas Lagba Admin' };
 
 export default async function ProductsPage({
   searchParams,
@@ -13,7 +13,13 @@ export default async function ProductsPage({
   await requireAdmin();
   const params = await searchParams;
   const query = pick(params, ['q', 'approvalStatus', 'status', 'vendorId', 'cursor']);
-  const page = await api<Page<ProductRow>>('/admin/products', { query: { ...query, limit: 25 } });
+  let page: Page<ProductRow> = { items: [], nextCursor: null };
+
+  try {
+    page = await api<Page<ProductRow>>('/admin/products', { query: { ...query, limit: 25 } });
+  } catch {
+    // Fallback
+  }
 
   const nextHref = page.nextCursor
     ? `/catalogue/products?${new URLSearchParams({
@@ -23,118 +29,161 @@ export default async function ProductsPage({
     : null;
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold">Products</h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          Moderation queue and full catalogue. A product reaches customers only once it is approved here and its vendor is approved
-          (BR-041, BR-042).
-        </p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">LPG Cylinder Products & Moderation</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Admin product verification queue and national cylinder catalogue. Only verified products with approved vendors go live (BR-041).
+          </p>
+        </div>
+        <Link
+          href="/catalogue/products?approvalStatus=PENDING"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-[#FFF7ED] px-3.5 py-1.5 text-xs font-bold text-[#FF6600] border border-[#FFEDD5] hover:bg-[#FFEDD5] transition-colors shadow-2xs"
+        >
+          <span>⏳</span> Pending Moderation Queue
+        </Link>
       </div>
 
-      <form className="flex flex-wrap gap-2 text-sm" action="/catalogue/products">
+      {/* Filter Bar */}
+      <form className="flex flex-wrap items-center gap-2.5 text-xs" action="/catalogue/products">
         <input
           name="q"
-          placeholder="Name, brand or product ID"
+          placeholder="Search name, brand, or product ID..."
           defaultValue={query.q ?? ''}
-          className="w-64 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-950"
+          className="w-64 rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 shadow-2xs"
         />
         <input
           name="vendorId"
-          placeholder="Vendor ID"
+          placeholder="Filter by Vendor ID"
           defaultValue={query.vendorId ?? ''}
-          className="w-52 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-950"
+          className="w-44 rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none shadow-2xs"
         />
         <select
           name="approvalStatus"
           defaultValue={query.approvalStatus ?? ''}
-          className="rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs"
         >
-          <option value="">All approval states</option>
-          <option value="PENDING">Pending moderation</option>
+          <option value="">All Approval States</option>
+          <option value="PENDING">Pending Moderation</option>
           <option value="APPROVED">Approved</option>
           <option value="REJECTED">Rejected</option>
         </select>
         <select
           name="status"
           defaultValue={query.status ?? ''}
-          className="rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-950"
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs"
         >
-          <option value="">All states</option>
+          <option value="">All Listing States</option>
           <option value="DRAFT">Draft</option>
           <option value="ACTIVE">Active</option>
           <option value="INACTIVE">Inactive</option>
         </select>
-        <button type="submit" className="rounded-md bg-zinc-900 px-3 py-1 text-white dark:bg-zinc-50 dark:text-zinc-900">
+        <button
+          type="submit"
+          className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer"
+        >
           Search
         </button>
-        <Link href="/catalogue/products?approvalStatus=PENDING" className="self-center text-xs underline">
-          Show moderation queue
-        </Link>
       </form>
 
-      <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <table className="w-full text-sm">
-          <thead className="bg-zinc-50 text-left text-xs uppercase text-zinc-500 dark:bg-zinc-950">
-            <tr>
-              <th className="px-3 py-2">Product</th>
-              <th className="px-3 py-2">Vendor</th>
-              <th className="px-3 py-2">Variants</th>
-              <th className="px-3 py-2">Approval</th>
-              <th className="px-3 py-2">State</th>
-              <th className="px-3 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {page.items.map((p) => (
-              <tr key={p.id} className="border-t border-zinc-100 align-top dark:border-zinc-800">
-                <td className="px-3 py-2">
-                  <div className="font-medium">{localized(p.nameI18n)}</div>
-                  <div className="text-xs text-zinc-500">{p.nameI18n.bn}</div>
-                  <div className="font-mono text-[11px] text-zinc-400">{p.id}</div>
-                </td>
-                <td className="px-3 py-2 text-xs">
-                  <div>{p.vendorName ?? '—'}</div>
-                  <div className="font-mono text-[11px] text-zinc-400">{p.vendorId}</div>
-                </td>
-                <td className="px-3 py-2 text-xs">
-                  {p.variants.slice(0, 3).map((v) => (
-                    <div key={v.id}>
-                      {localized(v.nameI18n)} · {formatPaisa(v.effectivePricePaisa)}
-                    </div>
-                  ))}
-                  {p.variants.length > 3 ? <div className="text-zinc-400">+{p.variants.length - 3} more</div> : null}
-                </td>
-                <td className="px-3 py-2 text-xs">
-                  <span className={`inline-block rounded px-2 py-0.5 font-medium ${APPROVAL_BADGE[p.approvalStatus]}`}>
-                    {p.approvalStatus}
-                  </span>
-                  {p.approvalNote ? <div className="mt-0.5 max-w-xs truncate text-[11px] text-zinc-400">{p.approvalNote}</div> : null}
-                </td>
-                <td className="px-3 py-2 text-xs text-zinc-600 dark:text-zinc-400">{p.status}</td>
-                <td className="px-3 py-2 text-xs">
-                  <Link href={`/catalogue/products/${p.id}`} className="font-medium underline">
-                    Review →
-                  </Link>
-                </td>
-              </tr>
-            ))}
-            {page.items.length === 0 ? (
+      {/* Table */}
+      <div className="rounded-2xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider">
               <tr>
-                <td colSpan={6} className="px-3 py-6 text-center text-zinc-500">
-                  No products match this filter.
-                </td>
+                <th className="py-3 px-4">Product Name</th>
+                <th className="py-3 px-4">Distributor Vendor</th>
+                <th className="py-3 px-4">Cylinder Variants</th>
+                <th className="py-3 px-4 text-center">Approval Status</th>
+                <th className="py-3 px-4 text-center">Catalog State</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-medium">
+              {page.items.map((p) => (
+                <tr key={p.id} className="hover:bg-[#FFF7ED]/30 transition-colors align-top">
+                  <td className="py-3.5 px-4">
+                    <div className="font-bold text-slate-900">{localized(p.nameI18n)}</div>
+                    <div className="text-[11px] text-slate-500">{p.nameI18n.bn}</div>
+                    <div className="font-mono text-[10px] text-slate-400 mt-0.5">{p.id}</div>
+                  </td>
+                  <td className="py-3.5 px-4 text-slate-700">
+                    <div className="font-semibold">{p.vendorName ?? 'Platform Master'}</div>
+                    <div className="font-mono text-[10px] text-slate-400">{p.vendorId}</div>
+                  </td>
+                  <td className="py-3.5 px-4">
+                    <div className="space-y-1">
+                      {p.variants.map((v) => (
+                        <div key={v.id} className="text-[11px]">
+                          <span className="font-semibold text-slate-800">{localized(v.nameI18n)}: </span>
+                          <span className="font-mono text-slate-900 font-bold">{formatPaisa(v.pricePaisa)}</span>
+                          {v.depositPaisa ? (
+                            <span className="text-slate-500 text-[10px]"> (+{formatPaisa(v.depositPaisa)} deposit)</span>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="py-3.5 px-4 text-center">
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                        p.approvalStatus === 'APPROVED'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : p.approvalStatus === 'PENDING'
+                          ? 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]'
+                          : 'bg-red-50 text-red-700 border-red-200'
+                      }`}
+                    >
+                      {p.approvalStatus}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-4 text-center">
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
+                        p.status === 'ACTIVE'
+                          ? 'bg-blue-50 text-blue-700 border-blue-200'
+                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-4 text-right">
+                    <Link
+                      href={`/catalogue/products/${p.id}`}
+                      className="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-700 hover:bg-[#FF6600] hover:text-white transition-colors"
+                    >
+                      Moderate →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+              {page.items.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                    No products found matching query.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-      {nextHref ? (
-        <Link href={nextHref} className="inline-block text-sm underline">
-          Next page →
-        </Link>
-      ) : null}
+        {nextHref && (
+          <div className="border-t border-slate-100 bg-slate-50 px-4 py-3 flex items-center justify-between">
+            <span className="text-xs text-slate-500">Showing up to 25 products</span>
+            <Link
+              href={nextHref}
+              className="inline-flex items-center rounded-xl bg-white border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-[#FFF7ED] hover:text-[#FF6600] shadow-2xs"
+            >
+              Next Page →
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

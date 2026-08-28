@@ -7,52 +7,70 @@ const initial: SignInState = { step: 'email', email: '' };
 
 export function SignInForm() {
   const [state, act, pending] = useActionState(
-    async (prev: SignInState, formData: FormData) => (prev.step === 'email' ? requestCode(prev, formData) : verifyCode(prev, formData)),
+    async (prev: SignInState, formData: FormData) =>
+      prev.step === 'email' ? requestCode(prev, formData) : verifyCode(prev, formData),
     initial,
   );
 
   return (
-    <form action={act} className="mt-6 space-y-4">
+    <form action={act} className="space-y-4">
       {state.step === 'email' ? (
-        <label className="block text-sm">
-          <span className="text-zinc-700 dark:text-zinc-300">Email</span>
+        <div className="space-y-1.5">
+          <label className="block text-xs font-bold text-slate-700">
+            Admin Work Email
+          </label>
           <input
             name="email"
             type="email"
             autoComplete="email"
             required
+            placeholder="admin@gaslagba.com"
             defaultValue={state.email}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
+            className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-900 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 transition-all shadow-2xs"
           />
-        </label>
+        </div>
       ) : (
-        <>
+        <div className="space-y-3">
           <input type="hidden" name="email" value={state.email} />
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Code sent to <span className="font-medium">{state.email}</span>.
-          </p>
-          <label className="block text-sm">
-            <span className="text-zinc-700 dark:text-zinc-300">One-time code</span>
+          <div className="rounded-xl bg-[#FFF7ED] p-3 text-xs text-slate-700 border border-[#FFEDD5]">
+            A 6-digit OTP has been sent to <span className="font-bold text-[#FF6600]">{state.email}</span>.
+          </div>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-700">
+              One-Time Verification Code
+            </label>
             <input
               name="code"
               inputMode="numeric"
               pattern="[0-9]*"
               autoComplete="one-time-code"
+              placeholder="123456"
               required
               autoFocus
-              className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 tracking-widest text-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-50"
+              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-center text-lg tracking-widest font-mono font-bold text-slate-900 placeholder-slate-300 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 transition-all shadow-2xs"
             />
-          </label>
-        </>
+          </div>
+        </div>
       )}
-      {state.error ? <p className="text-sm text-red-600">{state.error}</p> : null}
-      {state.notice && !state.error ? <p className="text-sm text-zinc-500">{state.notice}</p> : null}
+
+      {state.error && (
+        <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700 border border-red-200">
+          {state.error}
+        </div>
+      )}
+
+      {state.notice && !state.error && (
+        <div className="rounded-xl bg-slate-100 p-3 text-xs font-medium text-slate-600">
+          {state.notice}
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-md bg-zinc-900 px-3 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900"
+        className="w-full rounded-xl bg-[#FF6600] px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#EA580C] disabled:opacity-50 transition-all cursor-pointer"
       >
-        {pending ? 'Please wait…' : state.step === 'email' ? 'Send code' : 'Sign in'}
+        {pending ? 'Verifying with Gas Lagba API…' : state.step === 'email' ? 'Send OTP Code →' : 'Authorize & Sign In →'}
       </button>
     </form>
   );
