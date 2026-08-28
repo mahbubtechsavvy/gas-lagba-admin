@@ -32,9 +32,7 @@ export function PlanCard({ plan, canEdit }: PlanCardProps) {
             </h3>
             <span
               className={`rounded px-2 py-0.5 text-xs font-semibold ${
-                plan.isActive
-                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400'
-                  : 'bg-zinc-100 text-zinc-600'
+                plan.isActive ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-zinc-100 text-zinc-600'
               }`}
             >
               {plan.isActive ? 'ACTIVE' : 'INACTIVE'}
@@ -66,9 +64,7 @@ export function PlanCard({ plan, canEdit }: PlanCardProps) {
         </div>
         <div>
           <div className="text-xs text-zinc-500">Entitlements</div>
-          <div className="mt-0.5 text-xs text-zinc-600 dark:text-zinc-400">
-            {plan.entitlements.length} features enabled
-          </div>
+          <div className="mt-0.5 text-xs text-zinc-600 dark:text-zinc-400">{plan.entitlements.length} features enabled</div>
         </div>
       </div>
 

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { requireAdmin } from '@/lib/auth';
 
 export const metadata = { title: 'Support Desk · Gas Lagba Admin' };
@@ -164,14 +163,10 @@ export default async function SupportDeskPage() {
                     <div className="font-mono text-[10px] text-slate-400">{t.requesterPhone}</div>
                   </td>
                   <td className="py-3.5 px-4 text-center">
-                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold border ${priorityBadge(t.priority)}`}>
-                      {t.priority}
-                    </span>
+                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold border ${priorityBadge(t.priority)}`}>{t.priority}</span>
                   </td>
                   <td className="py-3.5 px-4 text-center">
-                    <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-700">
-                      {t.status}
-                    </span>
+                    <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-700">{t.status}</span>
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <button className="inline-flex items-center rounded-lg bg-[#FF6600] px-3 py-1 text-[11px] font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer">

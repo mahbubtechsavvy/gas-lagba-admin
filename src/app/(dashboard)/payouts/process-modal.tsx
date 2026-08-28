@@ -3,15 +3,7 @@
 import { useState } from 'react';
 import { processPayoutAction } from './actions';
 
-export function ProcessPayoutModal({
-  payoutId,
-  currentStatus,
-  amountPaisa,
-}: {
-  payoutId: string;
-  currentStatus: string;
-  amountPaisa: number;
-}) {
+export function ProcessPayoutModal({ payoutId, currentStatus, amountPaisa }: { payoutId: string; currentStatus: string; amountPaisa: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState(currentStatus === 'APPROVED' ? 'COMPLETED' : 'APPROVED');
   const [externalReference, setExternalReference] = useState('');
@@ -52,15 +44,10 @@ export function ProcessPayoutModal({
           <div className="w-full max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Process Disbursement #{payoutId}</h3>
             <p className="mt-1 text-xs text-zinc-500">
-              Amount: ৳{(amountPaisa / 100).toFixed(2)}. Updating to FAILED will automatically refund the vendor ledger
-              balance.
+              Amount: ৳{(amountPaisa / 100).toFixed(2)}. Updating to FAILED will automatically refund the vendor ledger balance.
             </p>
 
-            {error && (
-              <div className="mt-3 rounded-md bg-rose-50 p-2 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
-                {error}
-              </div>
-            )}
+            {error && <div className="mt-3 rounded-md bg-rose-50 p-2 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">{error}</div>}
 
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
               <div>
@@ -80,9 +67,7 @@ export function ProcessPayoutModal({
 
               {status === 'COMPLETED' && (
                 <div>
-                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                    Bank / MFS Transaction Reference
-                  </label>
+                  <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Bank / MFS Transaction Reference</label>
                   <input
                     type="text"
                     value={externalReference}

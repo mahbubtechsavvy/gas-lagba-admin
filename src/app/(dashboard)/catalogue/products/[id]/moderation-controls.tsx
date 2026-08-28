@@ -61,11 +61,7 @@ export function ProductModerationControls({ productId, approvalStatus, canModera
             <button type="submit" disabled={isPending} className="rounded bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-500">
               Confirm rejection
             </button>
-            <button
-              type="button"
-              onClick={() => setRejectOpen(false)}
-              className="rounded border border-zinc-300 px-3 py-1 text-xs dark:border-zinc-700"
-            >
+            <button type="button" onClick={() => setRejectOpen(false)} className="rounded border border-zinc-300 px-3 py-1 text-xs dark:border-zinc-700">
               Cancel
             </button>
           </div>

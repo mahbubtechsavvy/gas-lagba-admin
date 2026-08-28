@@ -26,20 +26,6 @@ interface DeliveryLogItem {
   createdAt: string;
 }
 
-function statusBadgeClass(status: string) {
-  switch (status) {
-    case 'SENT':
-    case 'DELIVERED':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-    case 'PENDING':
-      return 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]';
-    case 'FAILED':
-      return 'bg-red-50 text-red-700 border-red-200';
-    default:
-      return 'bg-slate-100 text-slate-600 border-slate-200';
-  }
-}
-
 export default async function NotificationsMonitoringPage() {
   await requireAdmin();
 
@@ -67,8 +53,7 @@ export default async function NotificationsMonitoringPage() {
   const totalAttempts = deliveries.length || 3990;
   const sentCount = deliveries.filter((d) => d.status === 'SENT' || d.status === 'DELIVERED').length || 3838;
   const failedCount = deliveries.filter((d) => d.status === 'FAILED').length || 64;
-  const overallSuccessRate =
-    totalAttempts > 0 ? Math.round((sentCount / totalAttempts) * 100) : 96;
+  const overallSuccessRate = totalAttempts > 0 ? Math.round((sentCount / totalAttempts) * 100) : 96;
 
   return (
     <div className="space-y-8">
@@ -87,10 +72,7 @@ export default async function NotificationsMonitoringPage() {
           { label: 'Failed / Dead Letter', value: failedCount.toLocaleString(), color: 'text-red-600' },
           { label: 'Overall Reliability', value: `${overallSuccessRate}%`, color: 'text-[#FF6600]' },
         ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs"
-          >
+          <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
             <p className={`mt-2 text-2xl font-black font-mono ${stat.color}`}>{stat.value}</p>
           </div>

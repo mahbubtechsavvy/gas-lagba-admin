@@ -39,11 +39,7 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default async function CampaignsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ status?: string; cursor?: string }>;
-}) {
+export default async function CampaignsPage({ searchParams }: { searchParams: Promise<{ status?: string; cursor?: string }> }) {
   await requireAdmin();
   const params = await searchParams;
 
@@ -66,9 +62,7 @@ export default async function CampaignsPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Campaigns & Push Broadcasts</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Targeted announcements, seasonal refill discounts, and FCM push notifications to customers & vendors.
-          </p>
+          <p className="text-xs text-slate-500 mt-0.5">Targeted announcements, seasonal refill discounts, and FCM push notifications to customers & vendors.</p>
         </div>
       </div>
 
@@ -80,10 +74,7 @@ export default async function CampaignsPage({
           { label: 'Broadcasts Sent', value: sentCount, color: 'text-emerald-600' },
           { label: 'Total Reached', value: totalRecipients.toLocaleString(), color: 'text-[#FF6600]' },
         ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs"
-          >
+          <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
             <p className={`mt-2 text-2xl font-black font-mono ${stat.color}`}>{stat.value}</p>
           </div>
@@ -121,9 +112,7 @@ export default async function CampaignsPage({
                       <div className="font-mono text-[10px] text-slate-400 mt-0.5">{c.id}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-semibold text-[10px] text-slate-700">
-                        {c.category}
-                      </span>
+                      <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-semibold text-[10px] text-slate-700">{c.category}</span>
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex gap-1 flex-wrap">
@@ -138,16 +127,10 @@ export default async function CampaignsPage({
                       </div>
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${statusBadgeClass(c.status)}`}>
-                        {c.status}
-                      </span>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${statusBadgeClass(c.status)}`}>{c.status}</span>
                     </td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900">
-                      {c.recipientCount.toLocaleString()}
-                    </td>
-                    <td className="py-3.5 px-4 text-[11px] text-slate-500">
-                      {new Date(c.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
-                    </td>
+                    <td className="py-3.5 px-4 text-right font-mono font-bold text-slate-900">{c.recipientCount.toLocaleString()}</td>
+                    <td className="py-3.5 px-4 text-[11px] text-slate-500">{new Date(c.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</td>
                     <td className="py-3.5 px-4 text-right">
                       <Link
                         href={`/campaigns/${c.id}`}

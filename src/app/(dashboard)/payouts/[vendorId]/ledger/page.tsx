@@ -86,13 +86,7 @@ export default async function VendorLedgerPage({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="text-xs font-medium text-zinc-500 uppercase">Page Movements Net</div>
-          <div
-            className={`mt-1 text-2xl font-bold ${
-              totalSettledPaisa >= 0
-                ? 'text-emerald-600 dark:text-emerald-400'
-                : 'text-rose-600 dark:text-rose-400'
-            }`}
-          >
+          <div className={`mt-1 text-2xl font-bold ${totalSettledPaisa >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
             ৳{(totalSettledPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
         </div>
@@ -104,9 +98,7 @@ export default async function VendorLedgerPage({
 
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="text-xs font-medium text-zinc-500 uppercase">Auditing Status</div>
-          <div className="mt-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-            Append-Only · Verified
-          </div>
+          <div className="mt-1 text-sm font-semibold text-emerald-600 dark:text-emerald-400">Append-Only · Verified</div>
         </div>
       </div>
 
@@ -144,27 +136,16 @@ export default async function VendorLedgerPage({
                   <tr key={entry.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50">
                     <td className="px-4 py-3 font-mono text-xs font-medium">{entry.id}</td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex rounded-full px-2 py-0.5 text-2xs font-medium ${badge.class}`}>
-                        {badge.label}
-                      </span>
+                      <span className={`inline-flex rounded-full px-2 py-0.5 text-2xs font-medium ${badge.class}`}>{badge.label}</span>
                     </td>
-                    <td
-                      className={`px-4 py-3 font-semibold ${
-                        isCredit
-                          ? 'text-emerald-600 dark:text-emerald-400'
-                          : 'text-rose-600 dark:text-rose-400'
-                      }`}
-                    >
-                      {isCredit ? '+' : ''}৳
-                      {(entry.amountPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    <td className={`px-4 py-3 font-semibold ${isCredit ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                      {isCredit ? '+' : ''}৳{(entry.amountPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-4 py-3 font-mono text-xs text-zinc-500">
                       {entry.referenceType}: {entry.referenceId}
                     </td>
                     <td className="px-4 py-3 text-xs text-zinc-600 dark:text-zinc-400">{entry.description || '—'}</td>
-                    <td className="px-4 py-3 text-right text-xs text-zinc-500">
-                      {new Date(entry.createdAt).toLocaleString('en-GB')}
-                    </td>
+                    <td className="px-4 py-3 text-right text-xs text-zinc-500">{new Date(entry.createdAt).toLocaleString('en-GB')}</td>
                   </tr>
                 );
               })
@@ -176,9 +157,7 @@ export default async function VendorLedgerPage({
       {ledgerData.nextCursor && (
         <div className="flex justify-end">
           <Link
-            href={`/payouts/${vendorId}/ledger?cursor=${ledgerData.nextCursor}${
-              sp.entryType ? `&entryType=${sp.entryType}` : ''
-            }`}
+            href={`/payouts/${vendorId}/ledger?cursor=${ledgerData.nextCursor}${sp.entryType ? `&entryType=${sp.entryType}` : ''}`}
             className="rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900"
           >
             Next page →

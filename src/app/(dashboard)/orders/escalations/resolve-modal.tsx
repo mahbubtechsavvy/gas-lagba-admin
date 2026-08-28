@@ -45,16 +45,12 @@ export function ResolveEscalationButton({ escalationId }: { escalationId: string
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Resolve Escalation</h3>
-            <p className="mt-1 text-xs text-zinc-500">
-              Provide an operational resolution note for the audit log.
-            </p>
+            <p className="mt-1 text-xs text-zinc-500">Provide an operational resolution note for the audit log.</p>
 
             <form onSubmit={handleResolve} className="mt-4">
               {error && <div className="mb-3 rounded bg-rose-50 p-2 text-xs text-rose-600 dark:bg-rose-950 dark:text-rose-300">{error}</div>}
-              
-              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Resolution Note *
-              </label>
+
+              <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Resolution Note *</label>
               <textarea
                 required
                 value={note}

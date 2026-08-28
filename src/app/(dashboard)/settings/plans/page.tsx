@@ -33,9 +33,7 @@ export default async function SubscriptionPlansPage() {
           <span>Subscription Plans</span>
         </div>
         <h1 className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Subscription Plans</h1>
-        <p className="mt-1 text-sm text-zinc-500">
-          Manage vendor subscription packages, pricing, durations, and entitlements (BR-201, D-016).
-        </p>
+        <p className="mt-1 text-sm text-zinc-500">Manage vendor subscription packages, pricing, durations, and entitlements (BR-201, D-016).</p>
       </div>
 
       <div className="space-y-4">

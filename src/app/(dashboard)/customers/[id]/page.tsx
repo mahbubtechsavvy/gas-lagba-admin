@@ -50,11 +50,7 @@ interface CustomerDetail {
   };
 }
 
-export default async function CustomerDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
 
   const { id } = await params;
@@ -71,17 +67,12 @@ export default async function CustomerDetailPage({
   return (
     <div className="space-y-6">
       <div>
-        <Link
-          href="/customers"
-          className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
-        >
+        <Link href="/customers" className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100">
           ← Back to Customers
         </Link>
         <div className="mt-2 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-              {customer.user.fullName || '(No name set)'}
-            </h1>
+            <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">{customer.user.fullName || '(No name set)'}</h1>
             <span
               className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
                 customer.user.status === 'ACTIVE'
@@ -120,11 +111,7 @@ export default async function CustomerDetailPage({
             <div>
               <dt className="text-zinc-500">Marketing Opt-In</dt>
               <dd className="mt-0.5 font-medium">
-                {customer.marketingOptIn ? (
-                  <span className="text-emerald-600">Subscribed</span>
-                ) : (
-                  <span className="text-zinc-400">Not subscribed</span>
-                )}
+                {customer.marketingOptIn ? <span className="text-emerald-600">Subscribed</span> : <span className="text-zinc-400">Not subscribed</span>}
               </dd>
             </div>
             <div>
@@ -135,16 +122,12 @@ export default async function CustomerDetailPage({
             </div>
             <div>
               <dt className="text-zinc-500">Registered On</dt>
-              <dd className="mt-0.5 text-zinc-700 dark:text-zinc-300">
-                {new Date(customer.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })}
-              </dd>
+              <dd className="mt-0.5 text-zinc-700 dark:text-zinc-300">{new Date(customer.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })}</dd>
             </div>
             <div>
               <dt className="text-zinc-500">Last Seen</dt>
               <dd className="mt-0.5 text-zinc-700 dark:text-zinc-300">
-                {customer.user.lastSeenAt
-                  ? new Date(customer.user.lastSeenAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })
-                  : '—'}
+                {customer.user.lastSeenAt ? new Date(customer.user.lastSeenAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' }) : '—'}
               </dd>
             </div>
           </dl>
@@ -193,9 +176,7 @@ export default async function CustomerDetailPage({
 
       {/* Address Book Table */}
       <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-          Saved Address Book ({customer.addresses.length})
-        </h2>
+        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Saved Address Book ({customer.addresses.length})</h2>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

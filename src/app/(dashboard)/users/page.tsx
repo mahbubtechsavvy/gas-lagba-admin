@@ -48,13 +48,21 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
           defaultValue={query.q ?? ''}
           className="w-72 rounded-xl border border-slate-200 bg-white px-3.5 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 shadow-2xs"
         />
-        <select name="kind" defaultValue={query.kind ?? ''} className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs">
+        <select
+          name="kind"
+          defaultValue={query.kind ?? ''}
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs"
+        >
           <option value="">Any Account Kind</option>
           <option value="CUSTOMER">Customer</option>
           <option value="VENDOR_USER">Vendor User</option>
           <option value="ADMIN">Platform Admin</option>
         </select>
-        <select name="status" defaultValue={query.status ?? ''} className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs">
+        <select
+          name="status"
+          defaultValue={query.status ?? ''}
+          className="rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 focus:border-[#FF6600] focus:outline-none shadow-2xs"
+        >
           <option value="">Any Status</option>
           <option value="ACTIVE">Active</option>
           <option value="SUSPENDED">Suspended</option>
@@ -88,16 +96,12 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
                     <div className="font-mono text-[10px] text-slate-400 mt-0.5">{u.id}</div>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-700">
-                      {u.kind}
-                    </span>
+                    <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-700">{u.kind}</span>
                   </td>
                   <td className="py-3.5 px-4 text-center">
                     <span
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                        u.status === 'ACTIVE'
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-red-50 text-red-700 border-red-200'
+                        u.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200'
                       }`}
                     >
                       {u.status}

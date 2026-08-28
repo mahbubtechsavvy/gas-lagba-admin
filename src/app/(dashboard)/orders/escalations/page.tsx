@@ -23,11 +23,7 @@ export interface AdminEscalationRow {
   };
 }
 
-export default async function EscalationsPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function EscalationsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await requireAdmin();
 
   const params = await searchParams;
@@ -56,18 +52,14 @@ export default async function EscalationsPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Order Escalation Queue</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Real-time monitor for unacknowledged orders exceeding 5m/10m SLA thresholds
-          </p>
+          <p className="text-xs text-slate-500 mt-0.5">Real-time monitor for unacknowledged orders exceeding 5m/10m SLA thresholds</p>
         </div>
 
         <div className="flex gap-2">
           <Link
             href="/orders/escalations"
             className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all shadow-2xs ${
-              !isResolvedView
-                ? 'bg-[#FF6600] text-white'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:text-[#FF6600]'
+              !isResolvedView ? 'bg-[#FF6600] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:text-[#FF6600]'
             }`}
           >
             Active Escalations
@@ -75,9 +67,7 @@ export default async function EscalationsPage({
           <Link
             href="/orders/escalations?resolved=true"
             className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all shadow-2xs ${
-              isResolvedView
-                ? 'bg-[#FF6600] text-white'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:text-[#FF6600]'
+              isResolvedView ? 'bg-[#FF6600] text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:text-[#FF6600]'
             }`}
           >
             Resolved History
@@ -113,9 +103,7 @@ export default async function EscalationsPage({
                     <td className="py-3.5 px-4">
                       <span
                         className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                          e.level === 'ADMIN'
-                            ? 'bg-red-50 text-red-700 border-red-200'
-                            : 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]'
+                          e.level === 'ADMIN' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]'
                         }`}
                       >
                         {e.level}
@@ -142,9 +130,7 @@ export default async function EscalationsPage({
                           <span className="inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
                             Resolved
                           </span>
-                          {e.resolutionNote && (
-                            <p className="text-[10px] text-slate-500 mt-1 italic">{e.resolutionNote}</p>
-                          )}
+                          {e.resolutionNote && <p className="text-[10px] text-slate-500 mt-1 italic">{e.resolutionNote}</p>}
                         </div>
                       ) : (
                         <span className="inline-flex rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-200">

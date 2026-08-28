@@ -32,11 +32,7 @@ interface PaymentDetail {
   }>;
 }
 
-export default async function PaymentInspectorPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function PaymentInspectorPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
   const { id } = await params;
 
@@ -63,9 +59,7 @@ export default async function PaymentInspectorPage({
         </div>
 
         <div className="flex items-center gap-2">
-          {payment.status === 'CAPTURED' && payment.orders.length > 0 && (
-            <RefundModal paymentId={payment.id} orders={payment.orders} />
-          )}
+          {payment.status === 'CAPTURED' && payment.orders.length > 0 && <RefundModal paymentId={payment.id} orders={payment.orders} />}
         </div>
       </div>
 
@@ -84,21 +78,15 @@ export default async function PaymentInspectorPage({
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-zinc-500">Gross Paid</span>
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-                ৳{(payment.amountPaisa / 100).toFixed(2)}
-              </span>
+              <span className="font-semibold text-zinc-900 dark:text-zinc-100">৳{(payment.amountPaisa / 100).toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-zinc-500">Total Refunded</span>
-              <span className="font-semibold text-rose-600 dark:text-rose-400">
-                ৳{(totalRefundedPaisa / 100).toFixed(2)}
-              </span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400">৳{(totalRefundedPaisa / 100).toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm pt-2 border-t border-zinc-100 dark:border-zinc-800">
               <span className="text-zinc-500">Gateway Ref</span>
-              <span className="font-mono text-xs text-zinc-700 dark:text-zinc-300">
-                {payment.providerReference || '—'}
-              </span>
+              <span className="font-mono text-xs text-zinc-700 dark:text-zinc-300">{payment.providerReference || '—'}</span>
             </div>
           </div>
         </div>
@@ -154,9 +142,7 @@ export default async function PaymentInspectorPage({
                 <tr key={r.id}>
                   <td className="px-4 py-3 font-mono text-xs font-medium">{r.id}</td>
                   <td className="px-4 py-3 font-mono text-xs">{r.orderId}</td>
-                  <td className="px-4 py-3 font-semibold text-rose-600 dark:text-rose-400">
-                    ৳{(r.amountPaisa / 100).toFixed(2)}
-                  </td>
+                  <td className="px-4 py-3 font-semibold text-rose-600 dark:text-rose-400">৳{(r.amountPaisa / 100).toFixed(2)}</td>
                   <td className="px-4 py-3 text-xs text-zinc-600 dark:text-zinc-400">{r.reason}</td>
                   <td className="px-4 py-3">
                     <span className="inline-flex rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
@@ -164,9 +150,7 @@ export default async function PaymentInspectorPage({
                     </span>
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-zinc-500">{r.providerRefundId || '—'}</td>
-                  <td className="px-4 py-3 text-xs text-zinc-500">
-                    {r.completedAt ? new Date(r.completedAt).toLocaleString('en-GB') : '—'}
-                  </td>
+                  <td className="px-4 py-3 text-xs text-zinc-500">{r.completedAt ? new Date(r.completedAt).toLocaleString('en-GB') : '—'}</td>
                 </tr>
               ))
             )}

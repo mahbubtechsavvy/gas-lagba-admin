@@ -129,9 +129,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
           </Link>
           <div className="mt-1 flex items-center gap-3">
             <h1 className="text-2xl font-bold font-mono text-zinc-900 dark:text-zinc-100">{order.orderNumber}</h1>
-            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadgeClass(order.status)}`}>
-              {order.status}
-            </span>
+            <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadgeClass(order.status)}`}>{order.status}</span>
             {order.hasActiveEscalation && (
               <span className="inline-flex rounded bg-rose-100 px-2 py-0.5 text-xs font-bold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
                 ACTIVE ESCALATION
@@ -139,7 +137,9 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             )}
           </div>
           <p className="text-xs text-zinc-500">
-            Placed on {new Date(order.placedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })} · Checkout ID: <span className="font-mono">{order.checkoutId}</span>
+            Placed on{' '}
+            {new Date(order.placedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })} ·
+            Checkout ID: <span className="font-mono">{order.checkoutId}</span>
           </p>
         </div>
 
@@ -205,9 +205,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             {order.items.map((item) => (
               <tr key={item.id}>
                 <td className="px-5 py-3">
-                  <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                    {item.productNameI18n?.en || 'Product'}
-                  </div>
+                  <div className="font-medium text-zinc-900 dark:text-zinc-100">{item.productNameI18n?.en || 'Product'}</div>
                   <div className="text-xs text-zinc-500">{item.variantNameI18n?.en || 'Variant'}</div>
                 </td>
                 <td className="px-5 py-3 text-xs">
@@ -215,9 +213,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                     {item.supplyType}
                   </span>
                 </td>
-                <td className="px-5 py-3 text-right text-xs">
-                  ৳{(item.unitPricePaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </td>
+                <td className="px-5 py-3 text-right text-xs">৳{(item.unitPricePaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                 <td className="px-5 py-3 text-right text-xs">
                   {item.unitDepositPaisa > 0 ? (
                     `৳${(item.unitDepositPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
@@ -273,14 +269,10 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
             {order.statusHistory.map((h) => (
               <div key={h.id} className="relative pl-4 border-l-2 border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center gap-2">
-                  <span className={`inline-flex rounded px-1.5 py-0.5 text-[10px] font-bold ${statusBadgeClass(h.toStatus)}`}>
-                    {h.toStatus}
-                  </span>
+                  <span className={`inline-flex rounded px-1.5 py-0.5 text-[10px] font-bold ${statusBadgeClass(h.toStatus)}`}>{h.toStatus}</span>
                   <span className="text-[11px] font-medium text-zinc-500 uppercase">{h.actorType}</span>
                   {h.isOverride && (
-                    <span className="rounded bg-rose-100 px-1 text-[9px] font-bold text-rose-700 dark:bg-rose-950 dark:text-rose-300">
-                      OVERRIDE
-                    </span>
+                    <span className="rounded bg-rose-100 px-1 text-[9px] font-bold text-rose-700 dark:bg-rose-950 dark:text-rose-300">OVERRIDE</span>
                   )}
                 </div>
                 {h.reason && <p className="mt-1 text-xs text-zinc-700 dark:text-zinc-300">{h.reason}</p>}
@@ -332,9 +324,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                       <span className="font-medium text-zinc-800 dark:text-zinc-200">Reason: {r.reason}</span>
                       <span className="font-bold text-[10px]">{r.status}</span>
                     </div>
-                    {r.decisionNote && (
-                      <div className="mt-1 text-[11px] text-zinc-500">Decision note: {r.decisionNote}</div>
-                    )}
+                    {r.decisionNote && <div className="mt-1 text-[11px] text-zinc-500">Decision note: {r.decisionNote}</div>}
                   </div>
                 ))}
               </div>

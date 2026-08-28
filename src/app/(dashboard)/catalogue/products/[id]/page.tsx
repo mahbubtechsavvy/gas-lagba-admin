@@ -24,9 +24,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </div>
         <h1 className="mt-1 text-2xl font-semibold">{localized(product.nameI18n)}</h1>
         <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-zinc-500">
-          <span className={`rounded px-2 py-0.5 text-xs font-medium ${APPROVAL_BADGE[product.approvalStatus]}`}>
-            {product.approvalStatus}
-          </span>
+          <span className={`rounded px-2 py-0.5 text-xs font-medium ${APPROVAL_BADGE[product.approvalStatus]}`}>{product.approvalStatus}</span>
           <span className="text-xs">state {product.status}</span>
           <span className="text-xs">unit {product.unit}</span>
           <Link href={`/vendors/${product.vendorId}`} className="text-xs underline">
@@ -38,8 +36,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <section className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
         <h2 className="text-sm font-semibold">Moderation</h2>
         <p className="mt-1 mb-3 text-xs text-zinc-500">
-          Approving publishes the product to customers. Name, description, brand, category and image edits send it back here
-          automatically; price edits do not (BR-041 / OD-15).
+          Approving publishes the product to customers. Name, description, brand, category and image edits send it back here automatically; price edits do not
+          (BR-041 / OD-15).
         </p>
         <ProductModerationControls productId={product.id} approvalStatus={product.approvalStatus} canModerate={canModerate} />
         {product.approvalNote ? <div className="mt-3 text-xs text-zinc-500">Last note: {product.approvalNote}</div> : null}
@@ -101,9 +99,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   <td className="px-3 py-2 text-xs">{v.cylinderSizeKg !== null ? `${v.cylinderSizeKg} kg` : '—'}</td>
                   <td className="px-3 py-2 text-xs">
                     {formatPaisa(v.pricePaisa)}
-                    {v.discountPricePaisa !== null ? (
-                      <span className="ml-1 text-zinc-400 line-through">{formatPaisa(v.discountPricePaisa)}</span>
-                    ) : null}
+                    {v.discountPricePaisa !== null ? <span className="ml-1 text-zinc-400 line-through">{formatPaisa(v.discountPricePaisa)}</span> : null}
                   </td>
                   <td className="px-3 py-2 text-xs font-medium">{formatPaisa(v.effectivePricePaisa)}</td>
                   <td className="px-3 py-2 text-xs">{v.depositPaisa > 0 ? formatPaisa(v.depositPaisa) : '—'}</td>

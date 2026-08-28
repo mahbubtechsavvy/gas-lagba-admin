@@ -29,20 +29,16 @@ export default async function VendorBranchesAdminPage({ params }: { params: Prom
 
       <div className="space-y-4">
         {vendor.branches?.map((b) => (
-          <div
-            key={b.id}
-            className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
-          >
+          <div key={b.id} className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                  {b.nameI18n?.en || b.nameI18n?.bn}
-                </h3>
+                <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{b.nameI18n?.en || b.nameI18n?.bn}</h3>
                 <p className="mt-1 text-xs text-zinc-500">
                   ID: <span className="font-mono">{b.id}</span> · Phone: {b.phone}
                 </p>
                 <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
-                  {b.addressLine}, {b.area}, {b.thana ? `${b.thana}, ` : ''}{b.district}
+                  {b.addressLine}, {b.area}, {b.thana ? `${b.thana}, ` : ''}
+                  {b.district}
                 </p>
               </div>
               <div className="flex items-center gap-2">

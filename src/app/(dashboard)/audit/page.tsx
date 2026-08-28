@@ -85,9 +85,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
                     {r.actorId ? <div className="text-[10px] text-slate-400 mt-0.5">{r.actorId}</div> : ''}
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold font-mono text-[10px] text-slate-700">
-                      {r.action}
-                    </span>
+                    <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold font-mono text-[10px] text-slate-700">{r.action}</span>
                   </td>
                   <td className="py-3.5 px-4 font-mono text-xs text-slate-700">
                     <div className="font-bold">{r.entityType}</div>

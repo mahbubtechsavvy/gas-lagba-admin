@@ -76,11 +76,7 @@ export function ModerationControls({ vendorId, status, commissionBps, canApprove
             className="w-full rounded border border-zinc-300 px-2 py-1 text-sm dark:border-zinc-700 dark:bg-zinc-900"
           />
           <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-500"
-            >
+            <button type="submit" disabled={isPending} className="rounded bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-500">
               Confirm rejection
             </button>
             <button
@@ -112,11 +108,7 @@ export function ModerationControls({ vendorId, status, commissionBps, canApprove
             className="w-full rounded border border-zinc-300 px-2 py-1 text-sm dark:border-zinc-700 dark:bg-zinc-900"
           />
           <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded bg-orange-600 px-3 py-1 text-xs font-medium text-white hover:bg-orange-500"
-            >
+            <button type="submit" disabled={isPending} className="rounded bg-orange-600 px-3 py-1 text-xs font-medium text-white hover:bg-orange-500">
               Confirm suspension
             </button>
             <button
@@ -131,10 +123,7 @@ export function ModerationControls({ vendorId, status, commissionBps, canApprove
       )}
 
       {canFinance && (
-        <form
-          action={(formData) => startTransition(() => setCommission(vendorId, formData))}
-          className="flex items-center gap-2"
-        >
+        <form action={(formData) => startTransition(() => setCommission(vendorId, formData))} className="flex items-center gap-2">
           <label className="text-xs text-zinc-500">Commission (bps):</label>
           <input
             type="number"

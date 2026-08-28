@@ -3,11 +3,7 @@
 import { useState } from 'react';
 import { adjustLedgerAction } from './actions';
 
-export function AdjustLedgerModal({
-  vendorId,
-}: {
-  vendorId?: string;
-}) {
+export function AdjustLedgerModal({ vendorId }: { vendorId?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [targetVendorId, setTargetVendorId] = useState(vendorId || '');
   const [amountPaisa, setAmountPaisa] = useState<number | ''>('');
@@ -47,15 +43,9 @@ export function AdjustLedgerModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Manual Compensating Ledger Entry</h3>
-            <p className="mt-1 text-xs text-zinc-500">
-              Posts an append-only audit adjustment entry to the vendor&apos;s financial ledger (DECISION-004).
-            </p>
+            <p className="mt-1 text-xs text-zinc-500">Posts an append-only audit adjustment entry to the vendor&apos;s financial ledger (DECISION-004).</p>
 
-            {error && (
-              <div className="mt-3 rounded-md bg-rose-50 p-2 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
-                {error}
-              </div>
-            )}
+            {error && <div className="mt-3 rounded-md bg-rose-50 p-2 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">{error}</div>}
 
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
               {!vendorId && (
@@ -94,9 +84,7 @@ export function AdjustLedgerModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                  Audit Reason / Description
-                </label>
+                <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Audit Reason / Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}

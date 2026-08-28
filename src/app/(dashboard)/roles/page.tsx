@@ -23,9 +23,7 @@ export default async function RolesPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">RBAC Roles & Permission Matrix</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Role-based access control matrix enforced at the API layer for each administrator endpoint.
-        </p>
+        <p className="text-xs text-slate-500 mt-0.5">Role-based access control matrix enforced at the API layer for each administrator endpoint.</p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -34,9 +32,7 @@ export default async function RolesPage() {
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-base font-bold text-slate-900">{r.name}</span>
-                <span className="font-mono text-[11px] font-bold text-[#FF6600] bg-[#FFF7ED] px-2 py-0.5 rounded-md border border-[#FFEDD5]">
-                  {r.key}
-                </span>
+                <span className="font-mono text-[11px] font-bold text-[#FF6600] bg-[#FFF7ED] px-2 py-0.5 rounded-md border border-[#FFEDD5]">{r.key}</span>
               </div>
               {r.description && <p className="mt-1.5 text-xs text-slate-500">{r.description}</p>}
             </div>

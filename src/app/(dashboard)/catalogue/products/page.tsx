@@ -5,11 +5,7 @@ import { formatPaisa, localized, type ProductRow } from '../types';
 
 export const metadata = { title: 'LPG Cylinders & Catalogue · Gas Lagba Admin' };
 
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function ProductsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await requireAdmin();
   const params = await searchParams;
   const query = pick(params, ['q', 'approvalStatus', 'status', 'vendorId', 'cursor']);
@@ -80,10 +76,7 @@ export default async function ProductsPage({
           <option value="ACTIVE">Active</option>
           <option value="INACTIVE">Inactive</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer"
-        >
+        <button type="submit" className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer">
           Search
         </button>
       </form>
@@ -120,9 +113,7 @@ export default async function ProductsPage({
                         <div key={v.id} className="text-[11px]">
                           <span className="font-semibold text-slate-800">{localized(v.nameI18n)}: </span>
                           <span className="font-mono text-slate-900 font-bold">{formatPaisa(v.pricePaisa)}</span>
-                          {v.depositPaisa ? (
-                            <span className="text-slate-500 text-[10px]"> (+{formatPaisa(v.depositPaisa)} deposit)</span>
-                          ) : null}
+                          {v.depositPaisa ? <span className="text-slate-500 text-[10px]"> (+{formatPaisa(v.depositPaisa)} deposit)</span> : null}
                         </div>
                       ))}
                     </div>
@@ -133,8 +124,8 @@ export default async function ProductsPage({
                         p.approvalStatus === 'APPROVED'
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                           : p.approvalStatus === 'PENDING'
-                          ? 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]'
-                          : 'bg-red-50 text-red-700 border-red-200'
+                            ? 'bg-[#FFF7ED] text-[#FF6600] border-[#FFEDD5]'
+                            : 'bg-red-50 text-red-700 border-red-200'
                       }`}
                     >
                       {p.approvalStatus}
@@ -143,9 +134,7 @@ export default async function ProductsPage({
                   <td className="py-3.5 px-4 text-center">
                     <span
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                        p.status === 'ACTIVE'
-                          ? 'bg-blue-50 text-blue-700 border-blue-200'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                        p.status === 'ACTIVE' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-slate-100 text-slate-600 border-slate-200'
                       }`}
                     >
                       {p.status}

@@ -40,10 +40,7 @@ export default async function RidersPage() {
           { label: 'Inactive / Off-Duty', value: inactive.length, color: 'text-slate-500' },
           { label: 'Serving Branches', value: new Set(riders.map((r) => r.branchId).filter(Boolean)).size, color: 'text-[#FF6600]' },
         ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs"
-          >
+          <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
             <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
             <p className={`mt-2 text-2xl font-black font-mono ${stat.color}`}>{stat.value}</p>
           </div>
@@ -79,9 +76,7 @@ export default async function RidersPage() {
                     <td className="py-3.5 px-4 text-center">
                       <span
                         className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                          rider.isActive
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : 'bg-slate-100 text-slate-600 border-slate-200'
+                          rider.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'
                         }`}
                       >
                         {rider.isActive ? 'Active' : 'Inactive'}

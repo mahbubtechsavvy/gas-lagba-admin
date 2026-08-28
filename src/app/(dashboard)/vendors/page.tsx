@@ -34,11 +34,7 @@ function vendorStatusBadge(status: string) {
   }
 }
 
-export default async function VendorsPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function VendorsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await requireAdmin();
   const params = await searchParams;
   const query = pick(params, ['q', 'status', 'cursor']);
@@ -90,10 +86,7 @@ export default async function VendorsPage({
           <option value="SUSPENDED">Suspended</option>
           <option value="REJECTED">Rejected</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs"
-        >
+        <button type="submit" className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs">
           Search
         </button>
       </form>
@@ -125,9 +118,7 @@ export default async function VendorsPage({
                   <tr key={v.id} className="hover:bg-[#E6EEF9]/20 transition-colors">
                     <td className="py-3.5 px-4">
                       <div className="font-bold text-slate-900">{v.legalName}</div>
-                      <div className="text-[11px] text-slate-500">
-                        {v.displayNameI18n?.en || v.displayNameI18n?.bn || '—'}
-                      </div>
+                      <div className="text-[11px] text-slate-500">{v.displayNameI18n?.en || v.displayNameI18n?.bn || '—'}</div>
                       <div className="font-mono text-[10px] text-slate-400 mt-0.5">{v.id}</div>
                     </td>
                     <td className="py-3.5 px-4 text-slate-700">
@@ -158,9 +149,7 @@ export default async function VendorsPage({
                         <span className="text-slate-400 text-[11px]">No reviews</span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-[11px] text-slate-500">
-                      {new Date(v.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
-                    </td>
+                    <td className="py-3.5 px-4 text-[11px] text-slate-500">{new Date(v.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</td>
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link

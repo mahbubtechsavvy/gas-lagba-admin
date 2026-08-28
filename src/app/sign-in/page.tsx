@@ -16,8 +16,8 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
     reason === 'not-admin'
       ? 'This account is not authorized for administrator access.'
       : reason === 'expired'
-      ? 'Your admin session has expired. Please sign in again.'
-      : undefined;
+        ? 'Your admin session has expired. Please sign in again.'
+        : undefined;
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4">
@@ -28,16 +28,10 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
             GL
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Gas Lagba Admin</h1>
-          <p className="mt-1 text-xs text-slate-500 font-medium">
-            Authorized Administrator Access & Operations Console
-          </p>
+          <p className="mt-1 text-xs text-slate-500 font-medium">Authorized Administrator Access & Operations Console</p>
         </div>
 
-        {reasonText && (
-          <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-semibold text-amber-800">
-            {reasonText}
-          </div>
-        )}
+        {reasonText && <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs font-semibold text-amber-800">{reasonText}</div>}
 
         <SignInForm />
 
@@ -49,9 +43,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
         )}
 
         <div className="mt-6 text-center">
-          <p className="text-[11px] text-slate-400">
-            Protected by Bangladesh OTP Authentication · Gas Lagba Operations
-          </p>
+          <p className="text-[11px] text-slate-400">Protected by Bangladesh OTP Authentication · Gas Lagba Operations</p>
         </div>
       </div>
     </main>

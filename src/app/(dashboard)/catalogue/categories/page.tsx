@@ -6,11 +6,7 @@ import { CategoryRowForm, NewCategoryForm } from './category-editor';
 
 export const metadata = { title: 'LPG Categories · Gas Lagba Admin' };
 
-export default async function CategoriesPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function CategoriesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const me = await requireAdmin();
   const params = await searchParams;
   const query = pick(params, ['q', 'isActive', 'cursor']);
@@ -59,10 +55,7 @@ export default async function CategoriesPage({
             <option value="true">Active only</option>
             <option value="false">Inactive only</option>
           </select>
-          <button
-            type="submit"
-            className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors"
-          >
+          <button type="submit" className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors">
             Search
           </button>
         </form>
@@ -95,9 +88,7 @@ export default async function CategoriesPage({
                   <td className="py-3.5 px-4">
                     <span
                       className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                        c.isActive
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                        c.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'
                       }`}
                     >
                       {c.isActive ? 'ACTIVE' : 'INACTIVE'}

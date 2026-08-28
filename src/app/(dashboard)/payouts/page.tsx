@@ -35,11 +35,7 @@ function payoutStatusBadge(status: string) {
   }
 }
 
-export default async function PayoutsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ cursor?: string; status?: string; vendorId?: string }>;
-}) {
+export default async function PayoutsPage({ searchParams }: { searchParams: Promise<{ cursor?: string; status?: string; vendorId?: string }> }) {
   await requireAdmin();
   const sp = await searchParams;
   let data: Page<PayoutSummary> = { items: [], nextCursor: null };
@@ -85,10 +81,7 @@ export default async function PayoutsPage({
           <option value="COMPLETED">COMPLETED</option>
           <option value="FAILED">FAILED</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs"
-        >
+        <button type="submit" className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs">
           Filter
         </button>
       </form>
@@ -121,10 +114,7 @@ export default async function PayoutsPage({
                   <tr key={p.id} className="hover:bg-[#E6EEF9]/20 transition-colors">
                     <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{p.id}</td>
                     <td className="py-3.5 px-4">
-                      <Link
-                        href={`/payouts/${p.vendorId}/ledger`}
-                        className="font-bold text-slate-900 hover:text-[#003496]"
-                      >
+                      <Link href={`/payouts/${p.vendorId}/ledger`} className="font-bold text-slate-900 hover:text-[#003496]">
                         {p.vendorName}
                       </Link>
                       <div className="font-mono text-[10px] text-slate-400">{p.vendorId}</div>
@@ -133,18 +123,10 @@ export default async function PayoutsPage({
                       ৳{(p.amountPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span className="inline-block rounded bg-slate-100 px-2 py-0.5 font-semibold text-slate-700 text-[10px]">
-                        {p.method || 'BANK'}
-                      </span>
+                      <span className="inline-block rounded bg-slate-100 px-2 py-0.5 font-semibold text-slate-700 text-[10px]">{p.method || 'BANK'}</span>
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span
-                        className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${payoutStatusBadge(
-                          p.status,
-                        )}`}
-                      >
-                        {p.status}
-                      </span>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${payoutStatusBadge(p.status)}`}>{p.status}</span>
                     </td>
                     <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600">
                       {p.externalReference ? (
@@ -155,9 +137,7 @@ export default async function PayoutsPage({
                         <span className="text-slate-400 italic font-normal">Pending reference</span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-[11px] text-slate-500">
-                      {new Date(p.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
-                    </td>
+                    <td className="py-3.5 px-4 text-[11px] text-slate-500">{new Date(p.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</td>
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link
@@ -166,13 +146,7 @@ export default async function PayoutsPage({
                         >
                           Ledger
                         </Link>
-                        {p.status !== 'COMPLETED' && (
-                          <ProcessPayoutModal
-                            payoutId={p.id}
-                            currentStatus={p.status}
-                            amountPaisa={p.amountPaisa}
-                          />
-                        )}
+                        {p.status !== 'COMPLETED' && <ProcessPayoutModal payoutId={p.id} currentStatus={p.status} amountPaisa={p.amountPaisa} />}
                       </div>
                     </td>
                   </tr>

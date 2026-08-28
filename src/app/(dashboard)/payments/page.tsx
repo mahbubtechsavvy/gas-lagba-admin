@@ -33,11 +33,7 @@ function paymentStatusBadge(status: string) {
   }
 }
 
-export default async function PaymentsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ cursor?: string; status?: string; method?: string; query?: string }>;
-}) {
+export default async function PaymentsPage({ searchParams }: { searchParams: Promise<{ cursor?: string; status?: string; method?: string; query?: string }> }) {
   await requireAdmin();
   const sp = await searchParams;
 
@@ -99,10 +95,7 @@ export default async function PaymentsPage({
           <option value="BKASH">bKash MFS</option>
           <option value="NAGAD">Nagad MFS</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer"
-        >
+        <button type="submit" className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer">
           Filter
         </button>
       </form>
@@ -139,21 +132,15 @@ export default async function PaymentsPage({
                       <div className="font-mono text-[10px] text-slate-400">Checkout: {p.checkoutId}</div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-700">
-                        {p.method}
-                      </span>
+                      <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-700">{p.method}</span>
                     </td>
                     <td className="py-3.5 px-4 text-right font-bold text-slate-900 font-mono">
                       ৳{(p.amountPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${paymentStatusBadge(p.status)}`}>
-                        {p.status}
-                      </span>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${paymentStatusBadge(p.status)}`}>{p.status}</span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600">
-                      {p.providerReference || '—'}
-                    </td>
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600">{p.providerReference || '—'}</td>
                     <td className="py-3.5 px-4 text-[11px] text-slate-500">
                       {new Date(p.createdAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}
                     </td>

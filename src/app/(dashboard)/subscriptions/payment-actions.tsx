@@ -51,11 +51,7 @@ export function PaymentActions({ paymentId, status }: PaymentActionsProps) {
             className="w-full rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900"
           />
           <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded bg-emerald-600 px-2.5 py-0.5 text-xs font-medium text-white hover:bg-emerald-500"
-            >
+            <button type="submit" disabled={isPending} className="rounded bg-emerald-600 px-2.5 py-0.5 text-xs font-medium text-white hover:bg-emerald-500">
               Confirm verify & activate
             </button>
             <button
@@ -87,11 +83,7 @@ export function PaymentActions({ paymentId, status }: PaymentActionsProps) {
             className="w-full rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900"
           />
           <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={isPending}
-              className="rounded bg-red-600 px-2.5 py-0.5 text-xs font-medium text-white hover:bg-red-500"
-            >
+            <button type="submit" disabled={isPending} className="rounded bg-red-600 px-2.5 py-0.5 text-xs font-medium text-white hover:bg-red-500">
               Confirm reject
             </button>
             <button

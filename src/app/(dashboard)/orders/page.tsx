@@ -53,11 +53,7 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default async function OrdersPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await requireAdmin();
 
   const params = await searchParams;
@@ -115,9 +111,7 @@ export default async function OrdersPage({
               key={tab.value}
               href={`/orders${tab.value ? `?status=${tab.value}` : ''}`}
               className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                isActive
-                  ? 'bg-[#003496] text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900'
+                isActive ? 'bg-[#003496] text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               {tab.label}
@@ -151,10 +145,7 @@ export default async function OrdersPage({
           <option value="CANCELLED">CANCELLED</option>
           <option value="REJECTED">REJECTED</option>
         </select>
-        <button
-          type="submit"
-          className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs"
-        >
+        <button type="submit" className="rounded-lg bg-[#003496] px-4 py-2 text-xs font-semibold text-white hover:bg-[#002875] transition-colors shadow-xs">
           Filter
         </button>
       </form>
@@ -211,9 +202,7 @@ export default async function OrdersPage({
                       ৳{(o.totalPaisa / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${statusBadgeClass(o.status)}`}>
-                        {o.status}
-                      </span>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${statusBadgeClass(o.status)}`}>{o.status}</span>
                     </td>
                     <td className="py-3.5 px-4 text-[11px] text-slate-500">
                       {new Date(o.placedAt).toLocaleString('en-GB', {

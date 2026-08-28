@@ -12,10 +12,7 @@ export function NewCategoryForm({ parents }: { parents: CategoryRow[] }) {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
-      >
+      <button onClick={() => setOpen(true)} className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900">
         New category
       </button>
     );
@@ -77,11 +74,7 @@ export function NewCategoryForm({ parents }: { parents: CategoryRow[] }) {
         >
           {isPending ? 'Creating…' : 'Create category'}
         </button>
-        <button
-          type="button"
-          onClick={() => setOpen(false)}
-          className="rounded border border-zinc-300 px-3 py-1 text-xs dark:border-zinc-700"
-        >
+        <button type="button" onClick={() => setOpen(false)} className="rounded border border-zinc-300 px-3 py-1 text-xs dark:border-zinc-700">
           Cancel
         </button>
       </div>
@@ -100,15 +93,29 @@ export function CategoryRowForm({ category, canEdit }: { category: CategoryRow; 
     <form action={(formData) => startTransition(() => updateCategory(category.id, formData))} className="flex flex-wrap items-end gap-2">
       <label className="text-[11px] text-zinc-500">
         EN
-        <input name="nameEn" defaultValue={category.nameI18n.en ?? ''} className="w-40 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900" />
+        <input
+          name="nameEn"
+          defaultValue={category.nameI18n.en ?? ''}
+          className="w-40 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900"
+        />
       </label>
       <label className="text-[11px] text-zinc-500">
         BN
-        <input name="nameBn" defaultValue={category.nameI18n.bn ?? ''} className="w-40 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900" />
+        <input
+          name="nameBn"
+          defaultValue={category.nameI18n.bn ?? ''}
+          className="w-40 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900"
+        />
       </label>
       <label className="text-[11px] text-zinc-500">
         Sort
-        <input name="sortOrder" type="number" min="0" defaultValue={category.sortOrder} className="w-16 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900" />
+        <input
+          name="sortOrder"
+          type="number"
+          min="0"
+          defaultValue={category.sortOrder}
+          className="w-16 rounded border border-zinc-300 px-2 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-900"
+        />
       </label>
       <label className="flex items-center gap-1 text-[11px] text-zinc-500">
         <input type="checkbox" name="isActive" defaultChecked={category.isActive} />

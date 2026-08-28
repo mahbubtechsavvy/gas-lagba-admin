@@ -19,9 +19,7 @@ export function DevLoginButton() {
       >
         {pending ? 'Signing in…' : 'Dev login'}
       </button>
-      <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">
-        Frontend testing only — signs in as a throwaway super admin. Removed before production.
-      </p>
+      <p className="mt-2 text-xs text-amber-700 dark:text-amber-300">Frontend testing only — signs in as a throwaway super admin. Removed before production.</p>
       {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
     </form>
   );

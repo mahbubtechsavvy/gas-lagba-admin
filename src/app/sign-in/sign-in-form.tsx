@@ -7,8 +7,7 @@ const initial: SignInState = { step: 'email', email: '' };
 
 export function SignInForm() {
   const [state, act, pending] = useActionState(
-    async (prev: SignInState, formData: FormData) =>
-      prev.step === 'email' ? requestCode(prev, formData) : verifyCode(prev, formData),
+    async (prev: SignInState, formData: FormData) => (prev.step === 'email' ? requestCode(prev, formData) : verifyCode(prev, formData)),
     initial,
   );
 
@@ -16,9 +15,7 @@ export function SignInForm() {
     <form action={act} className="space-y-4">
       {state.step === 'email' ? (
         <div className="space-y-1.5">
-          <label className="block text-xs font-bold text-slate-700">
-            Admin Work Email
-          </label>
+          <label className="block text-xs font-bold text-slate-700">Admin Work Email</label>
           <input
             name="email"
             type="email"
@@ -36,9 +33,7 @@ export function SignInForm() {
             A 6-digit OTP has been sent to <span className="font-bold text-[#FF6600]">{state.email}</span>.
           </div>
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700">
-              One-Time Verification Code
-            </label>
+            <label className="block text-xs font-bold text-slate-700">One-Time Verification Code</label>
             <input
               name="code"
               inputMode="numeric"
@@ -53,17 +48,9 @@ export function SignInForm() {
         </div>
       )}
 
-      {state.error && (
-        <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700 border border-red-200">
-          {state.error}
-        </div>
-      )}
+      {state.error && <div className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700 border border-red-200">{state.error}</div>}
 
-      {state.notice && !state.error && (
-        <div className="rounded-xl bg-slate-100 p-3 text-xs font-medium text-slate-600">
-          {state.notice}
-        </div>
-      )}
+      {state.notice && !state.error && <div className="rounded-xl bg-slate-100 p-3 text-xs font-medium text-slate-600">{state.notice}</div>}
 
       <button
         type="submit"

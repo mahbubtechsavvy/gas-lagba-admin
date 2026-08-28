@@ -20,11 +20,7 @@ export interface AdminCustomerListItem {
   } | null;
 }
 
-export default async function CustomersPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function CustomersPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   await requireAdmin();
 
   const params = await searchParams;
@@ -62,10 +58,7 @@ export default async function CustomersPage({
           defaultValue={query.q ?? ''}
           className="w-80 rounded-xl border border-slate-200 bg-white px-3.5 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 shadow-2xs"
         />
-        <button
-          type="submit"
-          className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer"
-        >
+        <button type="submit" className="rounded-xl bg-[#FF6600] px-4 py-2 font-bold text-white shadow-2xs hover:bg-[#EA580C] transition-colors cursor-pointer">
           Search
         </button>
       </form>
@@ -95,9 +88,7 @@ export default async function CustomersPage({
                 page.items.map((c) => (
                   <tr key={c.id} className="hover:bg-[#FFF7ED]/30 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900">
-                        {c.fullName || <span className="text-slate-400 italic">(Unnamed User)</span>}
-                      </div>
+                      <div className="font-bold text-slate-900">{c.fullName || <span className="text-slate-400 italic">(Unnamed User)</span>}</div>
                       <div className="text-[11px] text-slate-500 mt-0.5">
                         {c.email}
                         {c.phone ? ` · ${c.phone}` : ''}
@@ -106,7 +97,9 @@ export default async function CustomersPage({
                     </td>
                     <td className="py-3.5 px-4 text-slate-700">
                       {c.defaultAddress ? (
-                        <span className="font-medium">📍 {c.defaultAddress.area}, {c.defaultAddress.district}</span>
+                        <span className="font-medium">
+                          📍 {c.defaultAddress.area}, {c.defaultAddress.district}
+                        </span>
                       ) : (
                         <span className="text-slate-400 italic text-[11px]">No saved address</span>
                       )}
@@ -114,9 +107,7 @@ export default async function CustomersPage({
                     <td className="py-3.5 px-4 text-center">
                       <span
                         className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${
-                          c.status === 'ACTIVE'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : 'bg-red-50 text-red-700 border-red-200'
+                          c.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200'
                         }`}
                       >
                         {c.status}
@@ -131,9 +122,7 @@ export default async function CustomersPage({
                         <span className="text-slate-400 text-[10px]">Opted out</span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 text-[11px] text-slate-500">
-                      {new Date(c.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}
-                    </td>
+                    <td className="py-3.5 px-4 text-[11px] text-slate-500">{new Date(c.createdAt).toLocaleDateString('en-GB', { dateStyle: 'medium' })}</td>
                     <td className="py-3.5 px-4 text-right">
                       <Link
                         href={`/customers/${c.id}`}

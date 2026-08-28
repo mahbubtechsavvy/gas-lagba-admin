@@ -16,9 +16,7 @@ export default async function DashboardPage() {
       query: { limit: 10 },
     });
     activeOrders = ordersRes.items || [];
-    escalationCount = activeOrders.filter(
-      (o) => o.hasActiveEscalation || o.status === 'PENDING',
-    ).length;
+    escalationCount = activeOrders.filter((o) => o.hasActiveEscalation || o.status === 'PENDING').length;
   } catch {
     // Fallback if local backend is empty or seeding
   }
@@ -28,12 +26,8 @@ export default async function DashboardPage() {
       {/* Page Title & Environment Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Operations Control Dashboard
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Real-time marketplace monitoring, cylinder dispatch queues, and SLA tracking.
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Operations Control Dashboard</h1>
+          <p className="text-xs text-slate-500 mt-1">Real-time marketplace monitoring, cylinder dispatch queues, and SLA tracking.</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 text-xs font-bold text-slate-700 border border-slate-200 shadow-2xs">
@@ -55,16 +49,17 @@ export default async function DashboardPage() {
           <div className="flex items-center gap-3.5">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FF6600] text-white shadow-xs">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-slate-900 text-sm">
-                {escalationCount} Order(s) Require Dispatch Attention
-              </h4>
-              <p className="text-xs text-slate-600">
-                Unacknowledged or pending orders exceeding standard SLA response windows.
-              </p>
+              <h4 className="font-bold text-slate-900 text-sm">{escalationCount} Order(s) Require Dispatch Attention</h4>
+              <p className="text-xs text-slate-600">Unacknowledged or pending orders exceeding standard SLA response windows.</p>
             </div>
           </div>
           <Link
@@ -78,13 +73,7 @@ export default async function DashboardPage() {
 
       {/* 4 Key Metric Cards Grid (Clean White with Orange Highlights) */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Gross Volume (GMV)"
-          value="৳4,85,200"
-          change="+14.2% vs yesterday"
-          isPositive={true}
-          icon="currency"
-        />
+        <StatCard title="Gross Volume (GMV)" value="৳4,85,200" change="+14.2% vs yesterday" isPositive={true} icon="currency" />
         <StatCard
           title="Active Order Pipeline"
           value={String(activeOrders.length > 0 ? activeOrders.length : '48')}
@@ -92,20 +81,8 @@ export default async function DashboardPage() {
           isNeutral={true}
           icon="truck"
         />
-        <StatCard
-          title="Partner Branches"
-          value="36"
-          change="34 Active Online · 2 Closed"
-          isPositive={true}
-          icon="store"
-        />
-        <StatCard
-          title="Fulfillment SLA"
-          value="98.6%"
-          change="Avg 38m delivery window"
-          isPositive={true}
-          icon="check"
-        />
+        <StatCard title="Partner Branches" value="36" change="34 Active Online · 2 Closed" isPositive={true} icon="store" />
+        <StatCard title="Fulfillment SLA" value="98.6%" change="Avg 38m delivery window" isPositive={true} icon="check" />
       </div>
 
       {/* Live Order Dispatch Pipeline Table & Branch Analytics Grid */}
@@ -262,17 +239,7 @@ function StatCard({
       </div>
       <div className="mt-4">
         <div className="text-2xl font-black tracking-tight text-slate-900 font-mono">{value}</div>
-        <div
-          className={`mt-1 text-xs font-semibold ${
-            isPositive
-              ? 'text-emerald-600'
-              : isNeutral
-              ? 'text-slate-500'
-              : 'text-[#FF6600]'
-          }`}
-        >
-          {change}
-        </div>
+        <div className={`mt-1 text-xs font-semibold ${isPositive ? 'text-emerald-600' : isNeutral ? 'text-slate-500' : 'text-[#FF6600]'}`}>{change}</div>
       </div>
     </div>
   );
@@ -287,9 +254,13 @@ function StatusBadge({ status }: { status: string }) {
       return <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-200">Preparing</span>;
     case 'READY':
     case 'OUT_FOR_DELIVERY':
-      return <span className="inline-flex rounded-full bg-purple-50 px-2.5 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">In Transit</span>;
+      return (
+        <span className="inline-flex rounded-full bg-purple-50 px-2.5 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">In Transit</span>
+      );
     case 'DELIVERED':
-      return <span className="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">Delivered</span>;
+      return (
+        <span className="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">Delivered</span>
+      );
     case 'CANCELLED':
     case 'REJECTED':
       return <span className="inline-flex rounded-full bg-red-50 px-2.5 py-0.5 text-[10px] font-bold text-red-700 border border-red-200">Cancelled</span>;
@@ -298,22 +269,14 @@ function StatusBadge({ status }: { status: string }) {
   }
 }
 
-function BrandShareItem({
-  brand,
-  share,
-  count,
-  color,
-}: {
-  brand: string;
-  share: string;
-  count: string;
-  color: string;
-}) {
+function BrandShareItem({ brand, share, count, color }: { brand: string; share: string; count: string; color: string }) {
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
         <span>{brand}</span>
-        <span className="font-mono text-slate-500">{share} ({count})</span>
+        <span className="font-mono text-slate-500">
+          {share} ({count})
+        </span>
       </div>
       <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: share }} />
