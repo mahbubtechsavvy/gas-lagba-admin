@@ -4,8 +4,13 @@ import { signOut } from '@/app/sign-in/actions';
 
 const NAV: Array<{ href: string; label: string; permission?: string }> = [
   { href: '/dashboard', label: 'Dashboard' },
+  { href: '/vendors', label: 'Vendors', permission: 'vendors.read' },
+  { href: '/catalogue/categories', label: 'Categories', permission: 'catalogue.moderate' },
+  { href: '/catalogue/products', label: 'Products', permission: 'catalogue.moderate' },
+  { href: '/subscriptions', label: 'Subscriptions', permission: 'subscriptions.verify' },
   { href: '/users', label: 'Users', permission: 'users.read' },
   { href: '/settings', label: 'Settings', permission: 'settings.read' },
+  { href: '/settings/plans', label: 'Subscription plans', permission: 'settings.read' },
   { href: '/audit', label: 'Audit log', permission: 'audit.read' },
   { href: '/roles', label: 'Roles', permission: 'roles.read' },
 ];
