@@ -4,6 +4,7 @@ import { signOut } from '@/app/sign-in/actions';
 
 const NAV: Array<{ href: string; label: string; permission?: string }> = [
   { href: '/dashboard', label: 'Dashboard' },
+  { href: '/customers', label: 'Customers', permission: 'customers.read' },
   { href: '/vendors', label: 'Vendors', permission: 'vendors.read' },
   { href: '/catalogue/categories', label: 'Categories', permission: 'catalogue.moderate' },
   { href: '/catalogue/products', label: 'Products', permission: 'catalogue.moderate' },
