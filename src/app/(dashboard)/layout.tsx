@@ -31,7 +31,7 @@ const NAV_SECTIONS: NavSection[] = [
       { href: '/vendors', label: 'Vendor Network', icon: 'vendors', permission: 'vendors.read' },
       { href: '/catalogue/categories', label: 'Categories', icon: 'categories', permission: 'catalogue.moderate' },
       { href: '/catalogue/products', label: 'LPG Cylinders', icon: 'products', permission: 'catalogue.moderate' },
-      { href: '/subscriptions', label: 'Partner Plans', icon: 'subscriptions', permission: 'subscriptions.verify' },
+      { href: '/subscriptions', label: 'Subscription Payments', icon: 'subscriptions', permission: 'subscriptions.verify' },
     ],
   },
   {
