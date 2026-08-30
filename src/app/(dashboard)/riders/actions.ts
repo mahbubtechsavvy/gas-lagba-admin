@@ -24,3 +24,14 @@ export async function rejectRider(riderId: string, reason: string) {
 
   revalidatePath('/riders');
 }
+
+export async function createPlatformRider(formData: { name: string; phone: string; nidNo?: string }) {
+  await requireAdmin();
+
+  await api('/admin/riders/platform', {
+    method: 'POST',
+    body: JSON.stringify(formData),
+  });
+
+  revalidatePath('/riders');
+}

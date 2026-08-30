@@ -1,6 +1,7 @@
 import { api } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth';
 import { RiderActions } from './rider-actions';
+import { CreatePlatformRiderModal } from './create-platform-rider-modal';
 
 export const metadata = { title: 'Delivery Riders & Approvals · Gas Lagba Admin' };
 
@@ -41,13 +42,17 @@ export default async function RidersPage({
   const pending = riders.filter((r) => r.status === 'PENDING_APPROVAL');
   const active = riders.filter((r) => r.status === 'ACTIVE' || (r.isActive && r.status !== 'REJECTED' && r.status !== 'PENDING_APPROVAL'));
   const rejected = riders.filter((r) => r.status === 'REJECTED');
+  const platformRiders = riders.filter((r) => !r.branchId);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Branch Delivery Riders & Verification</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Review and approve vendor delivery personnel with compulsory NID identity cards and branch assignments.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Delivery Riders & Verification</h1>
+          <p className="text-xs text-slate-500 mt-0.5">Manage in-house vendor riders and Gas Lagba central platform delivery personnel.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <CreatePlatformRiderModal />
         </div>
       </div>
 
@@ -229,8 +234,16 @@ export default async function RidersPage({
                       </td>
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-700">{rider.phone}</td>
                       <td className="py-3.5 px-4">
-                        <div className="font-medium text-slate-800">{rider.branchName ?? 'Branch'}</div>
-                        <div className="font-mono text-[10px] text-slate-400">{rider.branchId ?? '—'}</div>
+                        {rider.branchId ? (
+                          <>
+                            <div className="font-medium text-slate-800">{rider.branchName ?? 'Vendor Branch'}</div>
+                            <div className="font-mono text-[10px] text-slate-400">{rider.branchId}</div>
+                          </>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-purple-50 px-2 py-1 text-[10px] font-bold text-purple-700 border border-purple-200">
+                            🚀 Gas Lagba Central Rider
+                          </span>
+                        )}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="font-mono text-slate-700">{rider.nidNo ?? '—'}</div>
