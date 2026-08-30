@@ -57,8 +57,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
             await updateAdminProfile(formData);
             setSuccess(true);
             setTimeout(() => setSuccess(false), 4000);
-          } catch (err: any) {
-            setError(err?.message || 'Failed to update profile');
+          } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Failed to update profile');
           }
         });
       }}

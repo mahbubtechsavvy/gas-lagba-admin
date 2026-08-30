@@ -57,10 +57,11 @@ export default async function RidersPage({
       </div>
 
       {/* Summary Stat Cards */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
         {[
           { label: 'Pending Approval', value: pending.length, color: 'text-amber-600 bg-amber-50/60 border-amber-200' },
           { label: 'Active on Duty', value: active.length, color: 'text-emerald-600 bg-white border-slate-200' },
+          { label: '🚀 Platform Central', value: platformRiders.length, color: 'text-purple-600 bg-purple-50/40 border-purple-200' },
           { label: 'Rejected Applications', value: rejected.length, color: 'text-red-600 bg-white border-slate-200' },
           { label: 'Total Registered', value: riders.length, color: 'text-slate-900 bg-white border-slate-200' },
         ].map((stat) => (

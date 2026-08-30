@@ -63,8 +63,8 @@ export async function createProductAsAdmin(data: {
 
     revalidatePath('/catalogue/products');
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to create product' };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to create product' };
   }
 }
 
@@ -73,7 +73,7 @@ export async function deleteProductAsAdmin(productId: string): Promise<{ success
     await api(`/admin/products/${productId}`, { method: 'DELETE' });
     revalidatePath('/catalogue/products');
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to delete product' };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to delete product' };
   }
 }

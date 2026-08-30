@@ -32,7 +32,7 @@ export function CreateProductModal({
   const [nameEn, setNameEn] = useState('');
   const [nameBn, setNameBn] = useState('');
   const [brand, setBrand] = useState('Bashundhara');
-  const [unit, setUnit] = useState<'KG' | 'PIECE' | 'SET'>('KG');
+  const [unit] = useState<'KG' | 'PIECE' | 'SET'>('KG');
   const [cylinderSizeKg, setCylinderSizeKg] = useState('12');
   const [supplyType, setSupplyType] = useState<'STANDARD' | 'REFILL' | 'NEW_CYLINDER'>('REFILL');
   const [priceTaka, setPriceTaka] = useState('1450');
@@ -224,7 +224,7 @@ export function CreateProductModal({
                   <label className="block font-bold text-slate-700 mb-1">Supply Type</label>
                   <select
                     value={supplyType}
-                    onChange={(e) => setSupplyType(e.target.value as any)}
+                    onChange={(e) => setSupplyType(e.target.value as 'STANDARD' | 'REFILL' | 'NEW_CYLINDER')}
                     className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
                   >
                     <option value="REFILL">Refill (Exchange Cylinder)</option>
@@ -283,7 +283,7 @@ export function CreateProductModal({
                   <label className="block font-bold text-slate-700 mb-1">Approval Moderation</label>
                   <select
                     value={approvalStatus}
-                    onChange={(e) => setApprovalStatus(e.target.value as any)}
+                    onChange={(e) => setApprovalStatus(e.target.value as 'APPROVED' | 'PENDING' | 'REJECTED')}
                     className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
                   >
                     <option value="APPROVED">✅ APPROVED (Publish immediately)</option>
@@ -295,7 +295,7 @@ export function CreateProductModal({
                   <label className="block font-bold text-slate-700 mb-1">Listing Status</label>
                   <select
                     value={status}
-                    onChange={(e) => setStatus(e.target.value as any)}
+                    onChange={(e) => setStatus(e.target.value as 'ACTIVE' | 'DRAFT' | 'INACTIVE')}
                     className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
                   >
                     <option value="ACTIVE">ACTIVE</option>

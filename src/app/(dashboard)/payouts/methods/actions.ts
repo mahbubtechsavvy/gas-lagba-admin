@@ -19,7 +19,7 @@ export async function reviewPayoutMethod(
 
     revalidatePath('/payouts/methods');
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Failed to review payout method' };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to review payout method' };
   }
 }
