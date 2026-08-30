@@ -4,20 +4,25 @@ import { requireAdmin } from '@/lib/auth';
 
 export const metadata = { title: 'Vendor Partners · Gas Lagba Admin' };
 
-export interface AdminVendorRow {
+export interface AdminVendorListItem {
   id: string;
+  uniqueCode: string | null;
   legalName: string;
   displayNameI18n: Record<string, string>;
+  logoUrl?: string | null;
   status: 'PENDING_APPROVAL' | 'APPROVED' | 'SUSPENDED' | 'REJECTED';
   statusReason: string | null;
   contactEmail: string;
   contactPhone: string;
   tradeLicenseNo: string | null;
+  nidNo: string | null;
   ratingAvg: number | null;
   ratingCount: number;
   createdAt: string;
   branches?: Array<{ id: string }>;
 }
+
+export type AdminVendorRow = AdminVendorListItem;
 
 function vendorStatusBadge(status: string) {
   switch (status) {
@@ -70,7 +75,7 @@ export default async function VendorsPage({ searchParams }: { searchParams: Prom
         <div className="relative flex-1 min-w-[240px]">
           <input
             name="q"
-            placeholder="Search by legal name, trade license, phone, email..."
+            placeholder="Search by legal name, #UniqueID, NID card, trade license, phone, email..."
             defaultValue={query.q ?? ''}
             className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 placeholder-slate-400 focus:border-[#003496] focus:outline-none focus:ring-1 focus:ring-[#003496]"
           />
@@ -100,7 +105,7 @@ export default async function VendorsPage({ searchParams }: { searchParams: Prom
                 <th className="py-3 px-4">Vendor Details</th>
                 <th className="py-3 px-4">Contact Info</th>
                 <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4">Trade License</th>
+                <th className="py-3 px-4">Trade License / NID</th>
                 <th className="py-3 px-4 text-center">Rating</th>
                 <th className="py-3 px-4">Joined</th>
                 <th className="py-3 px-4 text-right">Actions</th>
@@ -117,9 +122,28 @@ export default async function VendorsPage({ searchParams }: { searchParams: Prom
                 page.items.map((v) => (
                   <tr key={v.id} className="hover:bg-[#E6EEF9]/20 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900">{v.legalName}</div>
-                      <div className="text-[11px] text-slate-500">{v.displayNameI18n?.en || v.displayNameI18n?.bn || '—'}</div>
-                      <div className="font-mono text-[10px] text-slate-400 mt-0.5">{v.id}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-blue-50 flex items-center justify-center text-xs font-bold text-blue-600">
+                          {v.logoUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={v.logoUrl} alt={v.legalName} className="h-full w-full object-cover" />
+                          ) : (
+                            <span>{v.legalName.charAt(0).toUpperCase()}</span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900">{v.legalName}</span>
+                            {v.uniqueCode && (
+                              <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-black font-mono text-[#FF6600] border border-orange-200">
+                                #{v.uniqueCode}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-slate-500">{v.displayNameI18n?.en || v.displayNameI18n?.bn || '—'}</div>
+                          <div className="font-mono text-[10px] text-slate-400 mt-0.5">{v.id}</div>
+                        </div>
+                      </div>
                     </td>
                     <td className="py-3.5 px-4 text-slate-700">
                       <div className="font-semibold">{v.contactPhone}</div>

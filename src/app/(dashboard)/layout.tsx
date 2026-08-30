@@ -236,18 +236,21 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
         {/* User Profile & Sign Out Footer */}
         <div className="border-t border-slate-100 bg-[#FAFAFA] p-4">
-          <div className="flex items-center gap-3 mb-3 px-1">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#FF6600] border border-[#FFEDD5]">
+          <Link
+            href="/profile"
+            className="flex items-center gap-3 mb-3 p-1 rounded-xl hover:bg-orange-50 transition-colors group cursor-pointer"
+            title="Manage Profile"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#FF6600] border border-[#FFEDD5] group-hover:bg-[#FF6600] group-hover:text-white transition-colors">
               {me.email.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-slate-800 truncate">{me.email}</p>
-              <p className="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                Active Admin Session
+              <p className="text-xs font-semibold text-slate-800 truncate group-hover:text-[#FF6600]">{me.email}</p>
+              <p className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                ⚙️ View & Edit Profile
               </p>
             </div>
-          </div>
+          </Link>
           <form action={signOut}>
             <button
               type="submit"

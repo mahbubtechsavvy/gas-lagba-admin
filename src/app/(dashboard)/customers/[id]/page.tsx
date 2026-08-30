@@ -38,6 +38,7 @@ interface CustomerDetail {
     fullName: string;
     email: string;
     phone: string | null;
+    avatarUrl?: string | null;
     locale: string;
     status: string;
     lastSeenAt: string | null;
@@ -70,18 +71,31 @@ export default async function CustomerDetailPage({ params }: { params: Promise<{
         <Link href="/customers" className="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100">
           ← Back to Customers
         </Link>
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">{customer.user.fullName || '(No name set)'}</h1>
-            <span
-              className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                customer.user.status === 'ACTIVE'
-                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                  : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
-              }`}
-            >
-              {customer.user.status}
-            </span>
+        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="h-14 w-14 rounded-full overflow-hidden border-2 border-orange-200 bg-orange-50 flex items-center justify-center text-lg font-bold text-orange-600 shadow-xs">
+              {customer.user.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={customer.user.avatarUrl} alt={customer.user.fullName} className="h-full w-full object-cover" />
+              ) : (
+                <span>{customer.user.fullName ? customer.user.fullName.charAt(0).toUpperCase() : customer.user.email.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+            <div>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{customer.user.fullName || '(No name set)'}</h1>
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    customer.user.status === 'ACTIVE'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                      : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                  }`}
+                >
+                  {customer.user.status}
+                </span>
+              </div>
+              <p className="text-xs text-zinc-500 mt-0.5">{customer.user.email} {customer.user.phone ? `· ${customer.user.phone}` : ''}</p>
+            </div>
           </div>
           <div className="font-mono text-xs text-zinc-400">{customer.id}</div>
         </div>

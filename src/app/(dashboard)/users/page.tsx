@@ -11,6 +11,7 @@ export interface AdminUserRow {
   email: string;
   fullName: string;
   phone: string | null;
+  avatarUrl?: string | null;
   status: 'ACTIVE' | 'SUSPENDED' | 'DELETED';
   locale: string;
   createdAt: string;
@@ -88,12 +89,24 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
               {page.items.map((u) => (
                 <tr key={u.id} className="hover:bg-[#FFF7ED]/30 transition-colors">
                   <td className="py-3.5 px-4">
-                    <div className="font-bold text-slate-900">{u.fullName || <span className="text-slate-400 italic">(no name)</span>}</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">
-                      {u.email}
-                      {u.phone ? ` · ${u.phone}` : ''}
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 shrink-0 rounded-full overflow-hidden border border-slate-200 bg-orange-50 flex items-center justify-center text-xs font-bold text-orange-600">
+                        {u.avatarUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={u.avatarUrl} alt={u.fullName} className="h-full w-full object-cover" />
+                        ) : (
+                          <span>{u.fullName ? u.fullName.charAt(0).toUpperCase() : u.email.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-bold text-slate-900">{u.fullName || <span className="text-slate-400 italic">(no name)</span>}</div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {u.email}
+                          {u.phone ? ` · ${u.phone}` : ''}
+                        </div>
+                        <div className="font-mono text-[10px] text-slate-400 mt-0.5">{u.id}</div>
+                      </div>
                     </div>
-                    <div className="font-mono text-[10px] text-slate-400 mt-0.5">{u.id}</div>
                   </td>
                   <td className="py-3.5 px-4">
                     <span className="inline-block rounded-md bg-slate-100 px-2 py-0.5 font-bold text-[10px] text-slate-700">{u.kind}</span>

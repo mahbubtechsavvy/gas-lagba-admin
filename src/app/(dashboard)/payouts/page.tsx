@@ -64,6 +64,12 @@ export default async function PayoutsPage({ searchParams }: { searchParams: Prom
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            href="/payouts/methods"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-[#FFF7ED] hover:text-[#FF6600] transition-colors shadow-2xs"
+          >
+            <span>💳</span> Vendor Payment Accounts
+          </Link>
           <AdjustLedgerModal />
         </div>
       </div>

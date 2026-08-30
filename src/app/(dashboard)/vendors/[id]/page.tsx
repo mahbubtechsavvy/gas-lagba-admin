@@ -5,6 +5,7 @@ import { ModerationControls } from './moderation-controls';
 
 export interface VendorDetailResponse {
   id: string;
+  uniqueCode: string | null;
   legalName: string;
   displayNameI18n: Record<string, string>;
   descriptionI18n: Record<string, string> | null;
@@ -13,6 +14,9 @@ export interface VendorDetailResponse {
   contactEmail: string;
   contactPhone: string;
   tradeLicenseNo: string | null;
+  nidNo: string | null;
+  nidPhotoKey: string | null;
+  nidPhotoUrl: string | null;
   logoKey: string | null;
   logoUrl: string | null;
   commissionBps: number | null;
@@ -66,15 +70,30 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
   return (
     <div className="max-w-5xl space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 text-sm text-zinc-500">
-            <Link href="/vendors" className="hover:underline">
-              ← Vendors
-            </Link>
-            <span>/</span>
-            <span className="font-mono text-xs">{vendor.id}</span>
+        <div className="flex items-center gap-4">
+          <div className="h-16 w-16 rounded-xl overflow-hidden border-2 border-slate-200 bg-blue-50 flex items-center justify-center text-xl font-bold text-blue-600 shadow-xs">
+            {vendor.logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={vendor.logoUrl} alt={vendor.legalName} className="h-full w-full object-cover" />
+            ) : (
+              <span>{vendor.legalName.charAt(0).toUpperCase()}</span>
+            )}
           </div>
-          <h1 className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{vendor.legalName}</h1>
+          <div>
+            <div className="flex items-center gap-2 text-sm text-zinc-500">
+              <Link href="/vendors" className="hover:underline">
+                ← Vendors
+              </Link>
+              <span>/</span>
+              <span className="font-mono text-xs">{vendor.id}</span>
+              {vendor.uniqueCode && (
+                <span className="rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-black font-mono text-[#FF6600] border border-orange-200">
+                  #{vendor.uniqueCode}
+                </span>
+              )}
+            </div>
+            <h1 className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{vendor.legalName}</h1>
+          </div>
         </div>
 
         <ModerationControls vendorId={vendor.id} status={vendor.status} commissionBps={vendor.commissionBps} canApprove={canApprove} canFinance={canFinance} />
@@ -88,15 +107,15 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
           {vendor.statusReason && <div className="mt-0.5 text-xs text-red-500">{vendor.statusReason}</div>}
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="text-xs text-zinc-500">Commission</div>
-          <div className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {vendor.commissionBps !== null ? `${(vendor.commissionBps / 100).toFixed(2)}%` : 'Default (Platform)'}
+          <div className="text-xs text-zinc-500">Unique Vendor ID</div>
+          <div className="mt-1 text-sm font-mono font-black text-[#FF6600]">
+            {vendor.uniqueCode ? `#${vendor.uniqueCode}` : '—'}
           </div>
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="text-xs text-zinc-500">Rating</div>
+          <div className="text-xs text-zinc-500">Commission</div>
           <div className="mt-1 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {vendor.ratingAvg ? `⭐ ${vendor.ratingAvg.toFixed(1)} (${vendor.ratingCount})` : 'No ratings'}
+            {vendor.commissionBps !== null ? `${(vendor.commissionBps / 100).toFixed(2)}%` : 'Default (Platform)'}
           </div>
         </div>
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
@@ -105,35 +124,74 @@ export default async function VendorDetailPage({ params }: { params: Promise<{ i
         </div>
       </div>
 
-      {/* Vendor Profile Info */}
-      <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">Profile Details</h2>
-        <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 text-sm">
-          <div>
-            <dt className="text-xs text-zinc-500">Display Name (EN)</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.displayNameI18n?.en || '—'}</dd>
+      {/* Vendor Profile Info & NID Identity */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">Profile Details</h2>
+          <dl className="mt-4 grid grid-cols-1 gap-4 text-sm">
+            <div>
+              <dt className="text-xs text-zinc-500">Display Name (EN)</dt>
+              <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.displayNameI18n?.en || '—'}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-zinc-500">Contact Email</dt>
+              <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.contactEmail}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-zinc-500">Contact Phone</dt>
+              <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.contactPhone}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-zinc-500">Trade License No</dt>
+              <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.tradeLicenseNo || '—'}</dd>
+            </div>
+            <div>
+              <dt className="text-xs text-zinc-500">Registration Date</dt>
+              <dd className="font-medium text-zinc-900 dark:text-zinc-100">{new Date(vendor.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })}</dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Compulsory Vendor NID Card Verification Section */}
+        <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">National ID (NID) Verification</h2>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                vendor.nidNo ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
+              }`}
+            >
+              {vendor.nidNo ? '✓ NID Submitted' : 'Pending NID'}
+            </span>
           </div>
-          <div>
-            <dt className="text-xs text-zinc-500">Display Name (BN)</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.displayNameI18n?.bn || '—'}</dd>
+
+          <div className="mt-4 space-y-4 text-sm">
+            <div>
+              <span className="text-xs text-zinc-500">Vendor NID Number</span>
+              <p className="mt-0.5 font-mono font-bold text-base text-zinc-900 dark:text-zinc-100">
+                {vendor.nidNo || <span className="text-zinc-400 font-sans italic text-sm">Not provided yet</span>}
+              </p>
+            </div>
+
+            <div>
+              <span className="text-xs text-zinc-500">NID Document Photo</span>
+              {vendor.nidPhotoUrl || vendor.nidPhotoKey ? (
+                <div className="mt-2 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 p-2 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={vendor.nidPhotoUrl || `/api/v1/storage/${vendor.nidPhotoKey}`}
+                    alt="Vendor NID Photo"
+                    className="max-h-48 w-auto rounded object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="mt-2 rounded-lg border border-dashed border-zinc-300 p-6 text-center text-xs text-zinc-400">
+                  No NID document photo uploaded.
+                </div>
+              )}
+            </div>
           </div>
-          <div>
-            <dt className="text-xs text-zinc-500">Contact Email</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.contactEmail}</dd>
-          </div>
-          <div>
-            <dt className="text-xs text-zinc-500">Contact Phone</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.contactPhone}</dd>
-          </div>
-          <div>
-            <dt className="text-xs text-zinc-500">Trade License No</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{vendor.tradeLicenseNo || '—'}</dd>
-          </div>
-          <div>
-            <dt className="text-xs text-zinc-500">Registration Date</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-100">{new Date(vendor.createdAt).toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' })}</dd>
-          </div>
-        </dl>
+        </div>
       </div>
 
       {/* Branches section */}

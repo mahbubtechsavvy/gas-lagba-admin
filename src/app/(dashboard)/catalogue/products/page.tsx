@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { api, pick, type Page } from '@/lib/api';
 import { requireAdmin } from '@/lib/auth';
-import { formatPaisa, localized, type ProductRow } from '../types';
+import { formatPaisa, localized, type CategoryRow, type ProductRow } from '../types';
+import { CreateProductModal } from './create-product-modal';
 
 export const metadata = { title: 'LPG Cylinders & Catalogue · Gas Lagba Admin' };
 
@@ -10,9 +11,23 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const params = await searchParams;
   const query = pick(params, ['q', 'approvalStatus', 'status', 'vendorId', 'cursor']);
   let page: Page<ProductRow> = { items: [], nextCursor: null };
+  let categories: { id: string; name: string }[] = [];
+  let vendors: { id: string; name: string }[] = [];
 
   try {
-    page = await api<Page<ProductRow>>('/admin/products', { query: { ...query, limit: 25 } });
+    const [prodRes, catRes, vendRes] = await Promise.allSettled([
+      api<Page<ProductRow>>('/admin/products', { query: { ...query, limit: 25 } }),
+      api<CategoryRow[]>('/admin/categories'),
+      api<Page<{ publicId: string; legalName: string }>>('/admin/vendors', { query: { limit: 50 } }),
+    ]);
+
+    if (prodRes.status === 'fulfilled') page = prodRes.value;
+    if (catRes.status === 'fulfilled') {
+      categories = catRes.value.map((c) => ({ id: c.id, name: localized(c.nameI18n) }));
+    }
+    if (vendRes.status === 'fulfilled') {
+      vendors = vendRes.value.items.map((v) => ({ id: v.publicId, name: v.legalName }));
+    }
   } catch {
     // Fallback
   }
@@ -34,12 +49,15 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             Admin product verification queue and national cylinder catalogue. Only verified products with approved vendors go live (BR-041).
           </p>
         </div>
-        <Link
-          href="/catalogue/products?approvalStatus=PENDING"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[#FFF7ED] px-3.5 py-1.5 text-xs font-bold text-[#FF6600] border border-[#FFEDD5] hover:bg-[#FFEDD5] transition-colors shadow-2xs"
-        >
-          <span>⏳</span> Pending Moderation Queue
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <CreateProductModal categories={categories} vendors={vendors} />
+          <Link
+            href="/catalogue/products?approvalStatus=PENDING"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#FFF7ED] px-3.5 py-2 text-xs font-bold text-[#FF6600] border border-[#FFEDD5] hover:bg-[#FFEDD5] transition-colors shadow-2xs"
+          >
+            <span>⏳</span> Pending Moderation Queue
+          </Link>
+        </div>
       </div>
 
       {/* Filter Bar */}

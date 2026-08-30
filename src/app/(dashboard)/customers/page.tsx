@@ -7,9 +7,11 @@ export const metadata = { title: 'Customers · Gas Lagba Admin' };
 export interface AdminCustomerListItem {
   id: string;
   userId: string;
+  uniqueCode: string | null;
   fullName: string;
   email: string;
   phone: string | null;
+  avatarUrl?: string | null;
   status: string;
   marketingOptIn: boolean;
   firstOrderAt: string | null;
@@ -54,7 +56,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
       <form className="flex flex-wrap items-center gap-2.5 text-xs" action="/customers">
         <input
           name="q"
-          placeholder="Search by customer name, email, phone, or customer ID..."
+          placeholder="Search by customer name, #UniqueID, email, phone, or customer ID..."
           defaultValue={query.q ?? ''}
           className="w-80 rounded-xl border border-slate-200 bg-white px-3.5 py-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:outline-none focus:ring-2 focus:ring-[#FF6600]/20 shadow-2xs"
         />
@@ -88,12 +90,31 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
                 page.items.map((c) => (
                   <tr key={c.id} className="hover:bg-[#FFF7ED]/30 transition-colors">
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900">{c.fullName || <span className="text-slate-400 italic">(Unnamed User)</span>}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">
-                        {c.email}
-                        {c.phone ? ` · ${c.phone}` : ''}
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 shrink-0 rounded-full overflow-hidden border border-slate-200 bg-orange-50 flex items-center justify-center text-xs font-bold text-orange-600">
+                          {c.avatarUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={c.avatarUrl} alt={c.fullName} className="h-full w-full object-cover" />
+                          ) : (
+                            <span>{c.fullName ? c.fullName.charAt(0).toUpperCase() : c.email.charAt(0).toUpperCase()}</span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900">{c.fullName || <span className="text-slate-400 italic">(Unnamed User)</span>}</span>
+                            {c.uniqueCode && (
+                              <span className="rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-black font-mono text-[#FF6600] border border-orange-200">
+                                #{c.uniqueCode}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-slate-500 mt-0.5">
+                            {c.email}
+                            {c.phone ? ` · ${c.phone}` : ''}
+                          </div>
+                          <div className="font-mono text-[10px] text-slate-400 mt-0.5">{c.id}</div>
+                        </div>
                       </div>
-                      <div className="font-mono text-[10px] text-slate-400 mt-0.5">{c.id}</div>
                     </td>
                     <td className="py-3.5 px-4 text-slate-700">
                       {c.defaultAddress ? (
