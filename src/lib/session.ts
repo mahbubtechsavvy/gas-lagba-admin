@@ -11,8 +11,8 @@ export interface Session {
   refreshToken: string;
 }
 
-const ACCESS_MAX_AGE = 60 * 60; // provider access tokens are ≤ 1 h
-const REFRESH_MAX_AGE = 60 * 60 * 24 * 14;
+const ACCESS_MAX_AGE = 60 * 60 * 24 * 7; // 7 days (1 week)
+const REFRESH_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 function names(): { access: string; refresh: string } {
   const p = env.cookiePrefix();
