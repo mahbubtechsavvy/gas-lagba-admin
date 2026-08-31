@@ -70,23 +70,23 @@ export function SignInForm() {
 
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">
-              6-Digit Authentication Code
+              8-Digit Authentication Code
             </label>
             <div className="relative">
               <input
                 name="code"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                maxLength={6}
+                maxLength={8}
                 autoComplete="one-time-code"
-                placeholder="• • • • • •"
+                placeholder="• • • • • • • •"
                 required
                 autoFocus
-                className="w-full rounded-2xl border border-white/15 bg-slate-950/60 px-4 py-3 text-center text-xl tracking-[0.4em] font-mono font-black text-[#FF8C38] placeholder-slate-600 focus:border-[#FF6600] focus:bg-slate-950/80 focus:outline-none focus:ring-4 focus:ring-[#FF6600]/20 transition-all shadow-inner"
+                className="w-full rounded-2xl border border-white/15 bg-slate-950/60 px-4 py-3 text-center text-xl tracking-[0.3em] font-mono font-black text-[#FF8C38] placeholder-slate-600 focus:border-[#FF6600] focus:bg-slate-950/80 focus:outline-none focus:ring-4 focus:ring-[#FF6600]/20 transition-all shadow-inner"
               />
             </div>
             <p className="text-[11px] text-slate-400 text-center">
-              Check your inbox for the one-time code. Valid for 10 minutes.
+              Check your inbox for the 8-digit one-time code. Valid for 10 minutes.
             </p>
           </div>
         </div>

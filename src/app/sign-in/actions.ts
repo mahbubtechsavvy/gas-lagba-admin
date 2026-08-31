@@ -38,7 +38,7 @@ export async function verifyCode(prev: SignInState, formData: FormData): Promise
     .toLowerCase();
   const code = String(formData.get('code') ?? '').trim();
   if (!/^\d{6,8}$/.test(code)) {
-    return { step: 'code', email, error: 'Enter the 6-digit code from your email.' };
+    return { step: 'code', email, error: 'Enter the 8-digit code from your email.' };
   }
   try {
     const session = await api<{ accessToken: string; refreshToken: string }>('/auth/otp/verify', {
