@@ -39,6 +39,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { href: '/payments', label: 'Gateway & COD', icon: 'payments', permission: 'payments.read' },
       { href: '/payouts', label: 'Payout Ledger', icon: 'payouts', permission: 'payouts.manage' },
+      { href: '/payouts/methods', label: 'Payout Accounts', icon: 'payouts', permission: 'payouts.manage' },
     ],
   },
   {
