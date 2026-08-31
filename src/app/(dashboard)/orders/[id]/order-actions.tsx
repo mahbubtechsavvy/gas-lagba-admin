@@ -79,7 +79,7 @@ export function OrderAdminActions({ orderId, currentStatus }: { orderId: string;
       </button>
 
       {showCancelModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="text-lg font-semibold text-rose-600 dark:text-rose-400">Force Cancel Order</h3>
             <p className="mt-1 text-xs text-zinc-500">
@@ -121,7 +121,7 @@ export function OrderAdminActions({ orderId, currentStatus }: { orderId: string;
       )}
 
       {showOverrideModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900">
             <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Override Order Status</h3>
             <p className="mt-1 text-xs text-zinc-500">Admin status override will record an audited transition entry in the order status history.</p>

@@ -93,7 +93,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute inset-0 rounded-full bg-black/40 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                className="absolute inset-0 rounded-full bg-slate-900/50 backdrop-blur-[1px] text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
               >
                 Change
               </button>
