@@ -11,6 +11,7 @@ export async function createProductAsAdmin(data: {
   descriptionEn?: string;
   descriptionBn?: string;
   brand?: string;
+  photoUrl?: string;
   unit?: 'KG' | 'PIECE' | 'SET';
   cylinderSizeKg?: number;
   supplyType?: 'STANDARD' | 'REFILL' | 'NEW_CYLINDER';
@@ -34,13 +35,15 @@ export async function createProductAsAdmin(data: {
           en: data.nameEn.trim(),
           bn: data.nameBn.trim() || data.nameEn.trim(),
         },
-        descriptionI18n: data.descriptionEn || data.descriptionBn
-          ? {
-              en: data.descriptionEn?.trim() || data.nameEn.trim(),
-              bn: data.descriptionBn?.trim() || data.nameBn.trim() || data.nameEn.trim(),
-            }
-          : undefined,
+        descriptionI18n:
+          data.descriptionEn || data.descriptionBn
+            ? {
+                en: data.descriptionEn?.trim() || data.nameEn.trim(),
+                bn: data.descriptionBn?.trim() || data.nameBn.trim() || data.nameEn.trim(),
+              }
+            : undefined,
         brand: data.brand?.trim() || undefined,
+        photoUrl: data.photoUrl?.trim() || undefined,
         unit: data.unit || 'KG',
         status: data.status || 'ACTIVE',
         approvalStatus: data.approvalStatus || 'APPROVED',
@@ -65,6 +68,43 @@ export async function createProductAsAdmin(data: {
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : 'Failed to create product' };
+  }
+}
+
+export async function addProductImageAsAdmin(
+  productId: string,
+  storageKey: string,
+  altText?: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await api(`/admin/products/${productId}/images`, {
+      method: 'POST',
+      body: {
+        storageKey: storageKey.trim(),
+        altI18n: altText ? { en: altText, bn: altText } : undefined,
+      },
+    });
+    revalidatePath(`/catalogue/products/${productId}`);
+    revalidatePath('/catalogue/products');
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to add image' };
+  }
+}
+
+export async function removeProductImageAsAdmin(
+  productId: string,
+  imageId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await api(`/admin/products/${productId}/images/${imageId}`, {
+      method: 'DELETE',
+    });
+    revalidatePath(`/catalogue/products/${productId}`);
+    revalidatePath('/catalogue/products');
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to remove image' };
   }
 }
 

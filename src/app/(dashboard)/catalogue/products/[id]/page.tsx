@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { can, requireAdmin } from '@/lib/auth';
 import { APPROVAL_BADGE, formatPaisa, localized, type ProductRow } from '../../types';
+import { ProductImagesManager } from './product-images-manager';
 import { ProductModerationControls } from './moderation-controls';
 
 export const metadata = { title: 'Product review · Gas Lagba Admin' };
@@ -112,21 +113,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       </section>
 
       <section className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-        <h2 className="text-sm font-semibold">Images</h2>
-        {product.images.length === 0 ? (
-          <p className="mt-2 text-xs text-zinc-500">No images uploaded yet.</p>
-        ) : (
-          <ul className="mt-2 space-y-1 text-xs">
-            {product.images.map((img) => (
-              <li key={img.id} className="flex flex-wrap items-center gap-2">
-                <a href={img.url} target="_blank" rel="noreferrer" className="underline">
-                  {img.storageKey}
-                </a>
-                <span className="text-zinc-400">{localized(img.altI18n)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <h2 className="text-sm font-semibold">Product Photos & Media</h2>
+        <p className="mt-1 mb-3 text-xs text-zinc-500">
+          Upload real product photos, choose official brand presets, or manage existing images.
+        </p>
+        <ProductImagesManager productId={product.id} images={product.images} canModerate={canModerate} />
       </section>
 
       <div className="text-xs text-zinc-500">

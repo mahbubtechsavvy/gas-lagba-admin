@@ -39,12 +39,27 @@ export function CreateProductModal({
   const [priceTaka, setPriceTaka] = useState('1450');
   const [discountPriceTaka, setDiscountPriceTaka] = useState('');
   const [depositTaka, setDepositTaka] = useState('0');
+  const [photoUrl, setPhotoUrl] = useState('');
   const [status, setStatus] = useState<'ACTIVE' | 'DRAFT' | 'INACTIVE'>('ACTIVE');
   const [approvalStatus, setApprovalStatus] = useState<'APPROVED' | 'PENDING' | 'REJECTED'>('APPROVED');
 
   const filteredVendors = vendors.filter((v) =>
     v.name.toLowerCase().includes(vendorSearch.toLowerCase()) || v.id.toLowerCase().includes(vendorSearch.toLowerCase()),
   );
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size must be under 5MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhotoUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +92,7 @@ export function CreateProductModal({
         nameEn: nameEn.trim(),
         nameBn: nameBn.trim() || nameEn.trim(),
         brand: brand.trim() || undefined,
+        photoUrl: photoUrl.trim() || undefined,
         unit,
         cylinderSizeKg: parseFloat(cylinderSizeKg) || 12,
         supplyType,
@@ -270,6 +286,40 @@ export function CreateProductModal({
                     className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
                   />
                 </div>
+              </div>
+
+              {/* Product Photo / Image */}
+              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+                <label className="block font-bold text-slate-700 mb-1 text-xs">Product Photo / Image</label>
+                <div className="flex flex-wrap items-center gap-2">
+                  <label className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors">
+                    📁 Upload Device Image
+                    <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Or paste photo URL or storage key..."
+                    value={photoUrl}
+                    onChange={(e) => setPhotoUrl(e.target.value)}
+                    className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
+                  />
+                  {photoUrl ? (
+                    <button
+                      type="button"
+                      onClick={() => setPhotoUrl('')}
+                      className="text-xs font-bold text-rose-500 hover:underline"
+                    >
+                      Clear
+                    </button>
+                  ) : null}
+                </div>
+                {photoUrl ? (
+                  <div className="mt-2 flex items-center gap-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photoUrl} alt="Preview" className="h-10 w-10 rounded-lg object-cover border border-slate-200" />
+                    <span className="text-[11px] text-slate-500 truncate max-w-xs font-mono">Photo attached</span>
+                  </div>
+                ) : null}
               </div>
 
               {/* Pricing */}
