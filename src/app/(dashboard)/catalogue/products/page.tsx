@@ -17,16 +17,36 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   try {
     const [prodRes, catRes, vendRes] = await Promise.allSettled([
       api<Page<ProductRow>>('/admin/products', { query: { ...query, limit: 25 } }),
-      api<CategoryRow[]>('/admin/categories'),
-      api<Page<{ publicId: string; legalName: string }>>('/admin/vendors', { query: { limit: 50 } }),
+      api<Page<CategoryRow> | CategoryRow[]>('/admin/categories'),
+      api<Page<{ publicId: string; legalName: string; contactPhone?: string }>>('/admin/vendors', { query: { limit: 100 } }),
     ]);
 
     if (prodRes.status === 'fulfilled') page = prodRes.value;
     if (catRes.status === 'fulfilled') {
-      categories = catRes.value.map((c) => ({ id: c.id, name: localized(c.nameI18n) }));
+      const val = catRes.value as unknown;
+      const raw = val as { items?: CategoryRow[] } | CategoryRow[];
+      const list = Array.isArray(raw) ? raw : (raw?.items ?? []);
+      categories = list.map((c) => ({
+        id: c.id || 'cat_lpg_cylinders',
+        name: localized(c.nameI18n) || 'LPG Cylinders',
+      }));
+    }
+    if (categories.length === 0) {
+      categories = [
+        { id: 'cat_lpg_cylinders', name: 'LPG Cylinders' },
+        { id: 'cat_regulators', name: 'Regulators & Safety' },
+        { id: 'cat_accessories', name: 'Pipes & Accessories' },
+        { id: 'cat_stoves', name: 'Gas Stoves & Burners' },
+      ];
     }
     if (vendRes.status === 'fulfilled') {
-      vendors = vendRes.value.items.map((v) => ({ id: v.publicId, name: v.legalName }));
+      const vVal = vendRes.value as unknown;
+      const vRaw = vVal as { items?: Array<{ publicId: string; legalName: string; contactPhone?: string; id?: string }> } | Array<{ publicId: string; legalName: string; contactPhone?: string; id?: string }>;
+      const vList = Array.isArray(vRaw) ? vRaw : (vRaw?.items ?? []);
+      vendors = vList.map((v) => ({
+        id: v.publicId || v.id || '',
+        name: v.legalName ? `${v.legalName}${v.contactPhone ? ` (${v.contactPhone})` : ''}` : (v.publicId || ''),
+      })).filter((v) => Boolean(v.id));
     }
   } catch {
     // Fallback

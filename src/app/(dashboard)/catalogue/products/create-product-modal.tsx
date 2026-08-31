@@ -26,9 +26,10 @@ export function CreateProductModal({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const [vendorSearch, setVendorSearch] = useState('');
   const [vendorId, setVendorId] = useState(vendors[0]?.id || '');
   const [customVendorId, setCustomVendorId] = useState('');
-  const [categoryId, setCategoryId] = useState(categories[0]?.id || '');
+  const [categoryId, setCategoryId] = useState(categories[0]?.id || 'cat_lpg_cylinders');
   const [nameEn, setNameEn] = useState('');
   const [nameBn, setNameBn] = useState('');
   const [brand, setBrand] = useState('Bashundhara');
@@ -41,16 +42,21 @@ export function CreateProductModal({
   const [status, setStatus] = useState<'ACTIVE' | 'DRAFT' | 'INACTIVE'>('ACTIVE');
   const [approvalStatus, setApprovalStatus] = useState<'APPROVED' | 'PENDING' | 'REJECTED'>('APPROVED');
 
+  const filteredVendors = vendors.filter((v) =>
+    v.name.toLowerCase().includes(vendorSearch.toLowerCase()) || v.id.toLowerCase().includes(vendorSearch.toLowerCase()),
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     const targetVendor = vendorId === '__custom' || !vendorId ? customVendorId.trim() : vendorId;
     if (!targetVendor) {
-      setError('Please select or specify a Vendor ID');
+      setError('Please select or specify a Distributor Vendor');
       return;
     }
-    if (!categoryId) {
+    const targetCategory = categoryId || (categories.length > 0 ? categories[0].id : 'cat_lpg_cylinders');
+    if (!targetCategory) {
       setError('Please select a Category');
       return;
     }
@@ -67,7 +73,7 @@ export function CreateProductModal({
     startTransition(async () => {
       const res = await createProductAsAdmin({
         vendorId: targetVendor,
-        categoryId,
+        categoryId: targetCategory,
         nameEn: nameEn.trim(),
         nameBn: nameBn.trim() || nameEn.trim(),
         brand: brand.trim() || undefined,
@@ -93,7 +99,15 @@ export function CreateProductModal({
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          if (categories.length > 0 && !categoryId) {
+            setCategoryId(categories[0].id);
+          }
+          if (vendors.length > 0 && !vendorId) {
+            setVendorId(vendors[0].id);
+          }
+        }}
         className="inline-flex items-center gap-2 rounded-xl bg-[#003496] px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-[#002875] transition-colors cursor-pointer"
       >
         <span>+</span> Add Product on Behalf of Vendor
@@ -125,27 +139,36 @@ export function CreateProductModal({
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Vendor Selector */}
+                {/* Searchable Vendor Selector */}
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">Distributor Vendor *</label>
                   {vendors.length > 0 ? (
-                    <select
-                      value={vendorId}
-                      onChange={(e) => setVendorId(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
-                    >
-                      {vendors.map((v) => (
-                        <option key={v.id} value={v.id}>
-                          {v.name} ({v.id})
-                        </option>
-                      ))}
-                      <option value="__custom">Custom Vendor ID...</option>
-                    </select>
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        placeholder="🔍 Search vendor by name, phone or ID..."
+                        value={vendorSearch}
+                        onChange={(e) => setVendorSearch(e.target.value)}
+                        className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2 font-medium text-slate-800 placeholder-slate-400 focus:border-[#FF6600] focus:bg-white focus:outline-none"
+                      />
+                      <select
+                        value={vendorId}
+                        onChange={(e) => setVendorId(e.target.value)}
+                        className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
+                      >
+                        {filteredVendors.map((v) => (
+                          <option key={v.id} value={v.id}>
+                            {v.name}
+                          </option>
+                        ))}
+                        <option value="__custom">➕ Enter Custom Vendor ID / Phone Number...</option>
+                      </select>
+                    </div>
                   ) : null}
                   {(vendors.length === 0 || vendorId === '__custom') && (
                     <input
                       type="text"
-                      placeholder="Enter Vendor Public ID (e.g. vnd_...)"
+                      placeholder="Enter Vendor Public ID, Phone Number or Name"
                       value={customVendorId}
                       onChange={(e) => setCustomVendorId(e.target.value)}
                       className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
@@ -158,7 +181,7 @@ export function CreateProductModal({
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">Category *</label>
                   <select
-                    value={categoryId}
+                    value={categoryId || 'cat_lpg_cylinders'}
                     onChange={(e) => setCategoryId(e.target.value)}
                     className="w-full rounded-xl border border-slate-200 bg-white p-2.5 font-medium text-slate-800 focus:border-[#FF6600] focus:outline-none"
                     required
@@ -170,7 +193,12 @@ export function CreateProductModal({
                         </option>
                       ))
                     ) : (
-                      <option value="cat_lpg_cylinders">LPG Cylinders</option>
+                      <>
+                        <option value="cat_lpg_cylinders">LPG Cylinders (এলপিজি সিলিন্ডার)</option>
+                        <option value="cat_regulators">Regulators & Safety</option>
+                        <option value="cat_accessories">Pipes & Accessories</option>
+                        <option value="cat_stoves">Gas Stoves & Burners</option>
+                      </>
                     )}
                   </select>
                 </div>
